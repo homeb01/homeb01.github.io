@@ -55,12 +55,14 @@ const profile: Profile = {
     {
       degree: 'Maestría en Inteligencia Artificial Aplicada',
       institution: 'Universidad Internacional del Ecuador (UIDE)',
+      logo: '/logos/uide.svg',
       start: '2026-01',
       summary: 'En curso. Graduación prevista: enero de 2027.',
     },
     {
       degree: 'Ingeniería de Software',
       institution: 'Escuela Superior Politécnica de Chimborazo (ESPOCH)',
+      logo: '/logos/espoch.svg',
       location: 'Riobamba, Ecuador',
       start: '2018',
       end: '2023',

@@ -55,12 +55,14 @@ const profile: Profile = {
     {
       degree: "Master's in Applied Artificial Intelligence",
       institution: 'Universidad Internacional del Ecuador (UIDE)',
+      logo: '/logos/uide.svg',
       start: '2026-01',
       summary: 'In progress. Expected graduation: January 2027.',
     },
     {
       degree: 'Software Engineering',
       institution: 'Escuela Superior Politécnica de Chimborazo (ESPOCH)',
+      logo: '/logos/espoch.svg',
       location: 'Riobamba, Ecuador',
       start: '2018',
       end: '2023',

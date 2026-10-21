@@ -5,6 +5,7 @@ import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
 import SectionHeading from './SectionHeading.astro';
 import { useTranslations, type Lang } from '../i18n';
 import { formatYearMonth } from '../lib/format';
+import { withBase } from '../lib/url';
 import type { Profile } from '../data/profile';
 
 interface Props {
@@ -35,9 +36,15 @@ const card = 'rounded-lg border border-border bg-surface p-5 shadow-soft md:p-6'
           {profile.education.map((item, i) => (
             <li class={card} data-reveal style={`--reveal-delay: ${Math.min(i * 80, 400)}ms`}>
               <div class="flex items-start gap-4">
-                <span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft text-accent-soft-fg" aria-hidden="true">
-                  <GraduationCap class="size-5" />
-                </span>
+                {item.logo ? (
+                  <span class="grid size-14 shrink-0 place-items-center overflow-hidden rounded-md border border-border bg-white">
+                    <img src={withBase(item.logo)} alt={item.institution} width="56" height="56" loading="lazy" decoding="async" class="size-full object-contain" />
+                  </span>
+                ) : (
+                  <span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft text-accent-soft-fg" aria-hidden="true">
+                    <GraduationCap class="size-5" />
+                  </span>
+                )}
                 <div>
                   <p class="text-sm text-muted tabular-nums">
                     {period(item.start, item.end)}

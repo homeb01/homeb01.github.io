@@ -53,6 +53,8 @@ export interface EducationItem {
   degree: string;
   institution: string;
   institutionUrl?: string;
+  /** Root-relative path to the institution's logo in public/ (e.g. '/logos/uide.svg'). */
+  logo?: string;
   location?: string;
   start?: string;
   /** Omit if still in progress. */
