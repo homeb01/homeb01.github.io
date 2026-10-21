@@ -6,6 +6,7 @@ import Button from './Button.astro';
 import BrandIcon from './BrandIcon.astro';
 import { useTranslations, type Lang } from '../i18n';
 import type { Profile } from '../data/profile';
+import { withBase } from '../lib/url';
 
 interface Props {
   lang: Lang;
@@ -47,7 +48,7 @@ const newTab = t('a11y.newTab');
         }
         {
           cvPdf && (
-            <Button href={cvPdf} variant="ghost" external newTabLabel={newTab}>
+            <Button href={withBase(cvPdf)} variant="ghost" external newTabLabel={newTab}>
               <FileText class="size-4" aria-hidden="true" />
               {t('contact.cv')}
             </Button>

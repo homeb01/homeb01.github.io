@@ -1,5 +1,6 @@
 import es from './es';
 import en from './en';
+import { stripBase, withBase } from '../lib/url';
 
 export const languages = { es: 'Español', en: 'English' } as const;
 export type Lang = keyof typeof languages;
@@ -14,9 +15,9 @@ export function isLang(value: unknown): value is Lang {
   return typeof value === 'string' && value in languages;
 }
 
-/** Language of a URL: `/en/...` is English, anything else is the default (Spanish). */
+/** Language of a URL: `[base]/en/...` is English, anything else is the default (Spanish). */
 export function getLangFromUrl(url: URL): Lang {
-  const first = url.pathname.split('/')[1];
+  const first = stripBase(url.pathname).split('/')[1];
   return isLang(first) ? first : defaultLang;
 }
 
@@ -35,23 +36,23 @@ function normalize(path: string): string {
   return hash !== undefined ? `${p}#${hash}` : p;
 }
 
-/** Removes the language prefix: `/en/projects/` -> `/projects/`. */
+/** Removes the base and the language prefix: `[base]/en/projects/` -> `/projects/`. */
 export function stripLang(pathname: string): string {
-  const parts = pathname.split('/');
+  const parts = stripBase(pathname).split('/');
   if (isLang(parts[1]) && parts[1] !== defaultLang) parts.splice(1, 1);
   return normalize(parts.join('/') || '/');
 }
 
 /**
- * Localized path for a language-neutral path.
- * localizePath('/projects/', 'en') -> '/en/projects/'; localizePath('/projects/', 'es') -> '/projects/'
+ * Localized href (base included) for a language-neutral path. Idempotent.
+ * localizePath('/projects/', 'en') -> '[base]/en/projects/'; localizePath('/projects/', 'es') -> '[base]/projects/'
  */
 export function localizePath(path: string, lang: Lang): string {
   const neutral = stripLang(path.startsWith('/') ? path : `/${path}`);
-  return lang === defaultLang ? neutral : normalize(`/${lang}${neutral}`);
+  return withBase(lang === defaultLang ? neutral : normalize(`/${lang}${neutral}`));
 }
 
-/** Equivalent page in another language (used by the language switcher and hreflang). */
+/** Equivalent page in another language, base included (language switcher and hreflang). */
 export function getAlternatePath(pathname: string, target: Lang): string {
   return localizePath(stripLang(pathname), target);
 }

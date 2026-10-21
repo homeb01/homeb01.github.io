@@ -1,5 +1,6 @@
-import { defineCollection, z } from 'astro:content';
+import { defineCollection } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { z } from 'astro/zod';
 
 /**
  * Projects: one Markdown file per project and language.
@@ -17,8 +18,8 @@ const projects = defineCollection({
       tags: z.array(z.string()).default([]),
       cover: image().optional(),
       coverAlt: z.string().optional(),
-      repo: z.string().url().optional(),
-      demo: z.string().url().optional(),
+      repo: z.url().optional(),
+      demo: z.url().optional(),
       featured: z.boolean().default(false),
       draft: z.boolean().default(false),
     }),

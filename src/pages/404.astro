@@ -1,14 +1,23 @@
 ---
 /**
  * GitHub Pages serves this single /404.html for every missing URL, in both languages.
- * It renders in Spanish; a tiny inline script switches to the English block under /en/.
+ * It renders in Spanish; a tiny inline script switches to the English block under [base]/en/.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Button from '../components/Button.astro';
 import { langs, localizePath, useTranslations } from '../i18n';
+
+// '[base]/en/' — the English prefix, base included.
+const enPrefix = localizePath('/', 'en');
 ---
 
-<BaseLayout lang="es" title="404" description={useTranslations('es')('notFound.body')} noindex>
+<BaseLayout
+  lang="es"
+  title="404"
+  description={useTranslations('es')('notFound.body')}
+  alternates={{ es: localizePath('/', 'es'), en: enPrefix }}
+  noindex
+>
   <section class="glow">
     <div class="container-page flex min-h-[70svh] flex-col items-center justify-center py-20 text-center">
       <p class="text-gradient font-display text-8xl font-semibold tracking-tight md:text-9xl" aria-hidden="true">404</p>
@@ -28,8 +37,8 @@ import { langs, localizePath, useTranslations } from '../i18n';
       }
     </div>
   </section>
-  <script is:inline>
-    if (location.pathname.startsWith('/en/') || location.pathname === '/en') {
+  <script is:inline define:vars={{ enPrefix }}>
+    if (location.pathname.startsWith(enPrefix) || location.pathname === enPrefix.slice(0, -1)) {
       document.documentElement.lang = 'en';
       document.querySelectorAll('[data-lang-block]').forEach((el) => {
         el.hidden = el.getAttribute('data-lang-block') !== 'en';
