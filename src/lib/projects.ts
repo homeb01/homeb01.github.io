@@ -13,9 +13,18 @@ export function projectSlug(entry: ProjectEntry): string {
   return entry.id.split('/').slice(1).join('/');
 }
 
-/** Published projects of a language, newest first (drafts excluded). */
+/** Files whose name starts with `_` (e.g. `_template.md`) are documentation, never pages. */
+export function isTemplate(entry: ProjectEntry): boolean {
+  const file = (entry.filePath ?? entry.id).split('/').pop() ?? '';
+  return file.startsWith('_');
+}
+
+/** Published projects of a language, newest first (drafts and templates excluded). */
 export async function getProjects(lang: Lang): Promise<ProjectEntry[]> {
-  const entries = await getCollection('projects', (entry) => projectLang(entry) === lang && !entry.data.draft);
+  const entries = await getCollection(
+    'projects',
+    (entry) => projectLang(entry) === lang && !entry.data.draft && !isTemplate(entry),
+  );
   return entries.sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
 }
 

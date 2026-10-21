@@ -11,7 +11,11 @@ type Props = HTMLAttributes<'a'> & {
   class?: string;
 };
 
-const { href, variant = 'primary', external = false, newTabLabel, class: className, ...rest } = Astro.props;
+const { href, variant = 'primary', external = false, newTabLabel, class: className, rel, ...rest } = Astro.props;
+// External links always get noopener noreferrer; extra values (e.g. `me`) are merged, never duplicated.
+const relValue = external
+  ? [...new Set(['noopener', 'noreferrer', ...String(rel ?? '').split(/\s+/).filter(Boolean)])].join(' ')
+  : rel ?? undefined;
 
 const base =
   'group inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 py-2 font-medium transition duration-[250ms] ease-out-soft hover:-translate-y-0.5 active:translate-y-0';
@@ -24,7 +28,8 @@ const variants = {
 <a
   href={href}
   class:list={[base, variants[variant], className]}
-  {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+  target={external ? '_blank' : undefined}
+  rel={relValue}
   {...rest}
 >
   <slot />

@@ -34,13 +34,13 @@ const newTab = t('a11y.newTab');
             </Button>
           )
         }
-        <Button href={github} variant={email ? 'ghost' : 'primary'} external newTabLabel={newTab} rel="noopener noreferrer me">
+        <Button href={github} variant={email ? 'ghost' : 'primary'} external newTabLabel={newTab} rel="me">
           <BrandIcon name="github" class="size-4" />
           GitHub
         </Button>
         {
           linkedin && (
-            <Button href={linkedin} variant="ghost" external newTabLabel={newTab} rel="noopener noreferrer me">
+            <Button href={linkedin} variant="ghost" external newTabLabel={newTab} rel="me">
               <BrandIcon name="linkedin" class="size-4" />
               LinkedIn
             </Button>

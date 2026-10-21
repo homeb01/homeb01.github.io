@@ -23,7 +23,7 @@ const { lang, alternates, label } = Astro.props;
           href={alternates[code]}
           hreflang={code}
           lang={code}
-          aria-label={languages[code]}
+          aria-label={`${code.toUpperCase()} · ${languages[code]}`}
           aria-current={code === lang ? 'true' : undefined}
           class:list={[
             'inline-flex h-11 min-w-9 items-center justify-center rounded-sm px-1.5 uppercase transition-colors duration-[150ms]',

@@ -18,7 +18,7 @@ interface Props {
   alternates?: Partial<Record<Lang, string>>;
   /** false when the page has no translated counterpart (hreflang alternates are omitted). */
   translated?: boolean;
-  /** Absolute URL or site path (base added automatically) for the Open Graph image. */
+  /** Absolute URL or site path (base added automatically) for the Open Graph image. Defaults to /og.png (1200x630). */
   image?: string;
   type?: 'website' | 'article';
   section?: 'home' | 'projects' | 'other';
@@ -49,7 +49,7 @@ const canonical = new URL(pathname, Astro.site);
 const alternates = Object.fromEntries(
   langs.map((l) => [l, alternateOverrides[l] ?? getAlternatePath(pathname, l)]),
 ) as Record<Lang, string>;
-const imageUrl = image ? absoluteUrl(image, Astro.site) : undefined;
+const imageUrl = absoluteUrl(image ?? '/og.png', Astro.site);
 const ogLocale = { es: 'es_ES', en: 'en_US' } as const;
 ---
 
@@ -60,8 +60,7 @@ const ogLocale = { es: 'es_ES', en: 'en_US' } as const;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={metaDescription} />
-    <link rel="canonical" href={canonical.href} />
-    {noindex && <meta name="robots" content="noindex" />}
+    {noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonical.href} />}
     {
       translated &&
         !noindex &&
@@ -69,7 +68,9 @@ const ogLocale = { es: 'es_ES', en: 'en_US' } as const;
     }
     {translated && !noindex && <link rel="alternate" hreflang="x-default" href={new URL(alternates[defaultLang], Astro.site).href} />}
 
+    <link rel="icon" href={withBase('/favicon.ico')} sizes="32x32" />
     <link rel="icon" href={withBase('/favicon.svg')} type="image/svg+xml" />
+    <link rel="apple-touch-icon" href={withBase('/apple-touch-icon.png')} />
     <link rel="sitemap" href={withBase('/sitemap-index.xml')} />
     <meta name="theme-color" content="#FBFAF8" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0E0D14" media="(prefers-color-scheme: dark)" />
@@ -79,14 +80,17 @@ const ogLocale = { es: 'es_ES', en: 'en_US' } as const;
     <meta property="og:site_name" content={siteName} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={metaDescription} />
-    <meta property="og:url" content={canonical.href} />
+    {!noindex && <meta property="og:url" content={canonical.href} />}
     <meta property="og:locale" content={ogLocale[lang]} />
     {langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
-    {imageUrl && <meta property="og:image" content={imageUrl} />}
-    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    <meta property="og:image" content={imageUrl} />
+    {!image && <meta property="og:image:width" content="1200" />}
+    {!image && <meta property="og:image:height" content="630" />}
+    <meta property="og:image:alt" content={fullTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={metaDescription} />
-    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+    <meta name="twitter:image" content={imageUrl} />
 
     <!-- Before paint: enable JS-only styles and apply the saved/system theme (no flash). -->
     <script is:inline>
