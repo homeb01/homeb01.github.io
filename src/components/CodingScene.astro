@@ -1,0 +1,51 @@
+---
+import { useTranslations, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  initials: string;
+}
+const { lang, initials } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<!--
+  Pixel-art three.js diorama: Homero coding with his cat. three.js is only downloaded when the
+  scene becomes visible (the hero column only shows from `lg`). Without JS or WebGL the
+  initials card is shown instead.
+-->
+<div class="relative mx-auto aspect-square w-full max-w-md" role="img" aria-label={t('hero.sceneLabel')} data-coding-scene>
+  <div class="absolute inset-0 in-[.js]:hidden" aria-hidden="true" data-scene-fallback>
+    <div class="absolute inset-0 rotate-6 rounded-xl bg-accent-2-soft"></div>
+    <div
+      class="absolute inset-0 -rotate-3 rounded-xl border border-border bg-[linear-gradient(135deg,var(--color-accent),var(--color-accent-2))] shadow-lift"
+    >
+    </div>
+    <div class="absolute inset-0 grid place-items-center">
+      <span class="font-display text-8xl font-semibold tracking-tight text-accent-fg">{initials}</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-coding-scene]');
+  if (root) {
+    const showFallback = () => root.querySelector('[data-scene-fallback]')?.classList.remove('in-[.js]:hidden');
+    const start = () =>
+      import('../scripts/coding-scene')
+        .then(({ mount }) => mount(root) || showFallback())
+        .catch(showFallback);
+
+    if ('IntersectionObserver' in window) {
+      // Hidden (display: none) below `lg`, so this only fires once the column is on screen.
+      const observer = new IntersectionObserver((entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return;
+        observer.disconnect();
+        start();
+      });
+      observer.observe(root);
+    } else {
+      start();
+    }
+  }
+</script>

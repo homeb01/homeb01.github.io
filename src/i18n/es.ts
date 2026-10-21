@@ -23,6 +23,7 @@ const es = {
   'hero.ctaProjects': 'Ver proyectos',
   'hero.ctaContact': 'Contacto',
   'hero.scroll': 'Ir a la sección Sobre mí',
+  'hero.sceneLabel': 'Ilustración pixel art de Homero programando en su escritorio con su gato sobre los libros',
 
   'about.title': 'Sobre mí',
   'about.location': 'Ubicación',

@@ -21,10 +21,12 @@
     "@tailwindcss/vite": "^4.3.3",
     "astro": "^7.4.2",
     "simple-icons": "^16.35.0",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "three": "^0.186.1"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@types/three": "^0.186.0",
     "typescript": "^5.9.3"
   }
 }

@@ -25,6 +25,7 @@ const en: Record<keyof typeof es, string> = {
   'hero.ctaProjects': 'View projects',
   'hero.ctaContact': 'Contact',
   'hero.scroll': 'Go to the About section',
+  'hero.sceneLabel': 'Pixel art illustration of Homero coding at his desk with his cat sitting on the books',
 
   'about.title': 'About me',
   'about.location': 'Location',
