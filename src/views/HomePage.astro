@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro';
 import About from '../components/About.astro';
 import Experience from '../components/Experience.astro';
 import Education from '../components/Education.astro';
+import Research from '../components/Research.astro';
 import Skills from '../components/Skills.astro';
 import Projects from '../components/Projects.astro';
 import Contact from '../components/Contact.astro';
@@ -22,6 +23,7 @@ const visible = {
   about: profile.about.length > 0,
   experience: profile.experience.length > 0,
   education: profile.education.length + (profile.certifications?.length ?? 0) > 0,
+  research: (profile.publications?.length ?? 0) > 0,
   skills: profile.skills.length > 0,
   projects: true,
   contact: true,
@@ -35,6 +37,7 @@ const eyebrow = (key: keyof typeof visible) => `${String(order.indexOf(key) + 1)
   {visible.about && <About lang={lang} profile={profile} eyebrow={eyebrow('about')} />}
   {visible.experience && <Experience lang={lang} profile={profile} eyebrow={eyebrow('experience')} />}
   {visible.education && <Education lang={lang} profile={profile} eyebrow={eyebrow('education')} />}
+  {visible.research && <Research lang={lang} profile={profile} eyebrow={eyebrow('research')} />}
   {visible.skills && <Skills lang={lang} profile={profile} eyebrow={eyebrow('skills')} />}
   <Projects lang={lang} eyebrow={eyebrow('projects')} />
   <Contact lang={lang} profile={profile} eyebrow={eyebrow('contact')} />

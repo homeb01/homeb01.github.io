@@ -10,6 +10,7 @@ const en: Record<keyof typeof es, string> = {
   'nav.about': 'About',
   'nav.experience': 'Experience',
   'nav.education': 'Education',
+  'nav.research': 'Research',
   'nav.skills': 'Skills',
   'nav.projects': 'Projects',
   'nav.contact': 'Contact',
@@ -36,6 +37,11 @@ const en: Record<keyof typeof es, string> = {
   'education.title': 'Education',
   'education.lead': 'Academic background and certifications.',
   'education.certifications': 'Certifications',
+
+  'research.title': 'Research',
+  'research.lead': 'Papers and academic publications.',
+  'research.authors': 'Authors',
+  'research.read': 'Read paper',
 
   'skills.title': 'Skills',
   'skills.lead': 'Technologies and tools I work with.',

@@ -8,6 +8,7 @@ const es = {
   'nav.about': 'Sobre mí',
   'nav.experience': 'Experiencia',
   'nav.education': 'Educación',
+  'nav.research': 'Investigación',
   'nav.skills': 'Habilidades',
   'nav.projects': 'Proyectos',
   'nav.contact': 'Contacto',
@@ -34,6 +35,11 @@ const es = {
   'education.title': 'Educación',
   'education.lead': 'Formación académica y certificaciones.',
   'education.certifications': 'Certificaciones',
+
+  'research.title': 'Investigación',
+  'research.lead': 'Artículos y publicaciones académicas.',
+  'research.authors': 'Autores',
+  'research.read': 'Leer artículo',
 
   'skills.title': 'Habilidades',
   'skills.lead': 'Tecnologías y herramientas con las que trabajo.',

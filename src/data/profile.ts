@@ -30,6 +30,8 @@ export interface Profile {
   skills: SkillGroup[];
   languages: LanguageItem[];
   certifications?: Certification[];
+  /** Research articles / papers (optional; empty or missing hides the section). */
+  publications?: Publication[];
   links: ProfileLinks;
 }
 
@@ -80,6 +82,18 @@ export interface Certification {
   issuer?: string;
   /** 'YYYY-MM' or 'YYYY'. */
   date?: string;
+  url?: string;
+}
+
+export interface Publication {
+  title: string;
+  /** Author names, in order. */
+  authors: string[];
+  /** Conference or journal, e.g. 'ICAETT 2026'. */
+  venue: string;
+  /** 'YYYY-MM-DD', 'YYYY-MM' or 'YYYY'. */
+  date: string;
+  description?: string;
   url?: string;
 }
 

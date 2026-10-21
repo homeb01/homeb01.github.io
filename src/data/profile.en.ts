@@ -1,80 +1,151 @@
 import type { Profile } from './profile';
 
-// TODO(content): every value in this file is a PLACEHOLDER.
-// The `content` agent will replace it with real CV data (Phase 2).
-// Keep the same structure as profile.es.ts.
-
 const profile: Profile = {
-  name: 'First Last', // TODO(content)
+  name: 'Homero Barragán',
   initials: 'hb',
-  role: 'Professional role', // TODO(content)
-  headline: 'I build things for the web', // TODO(content)
-  tagline: 'A short sentence that sums up who you are and what drives you. Two lines at most.', // TODO(content)
-  location: 'City, Country', // TODO(content)
+  role: 'Software Engineer | Data Science | Applied AI',
+  headline: 'I turn data into decisions',
+  tagline:
+    'Software engineer moving into Data Science and applied AI. I build practical solutions that turn data into useful insights.',
+  location: 'Riobamba, Ecuador',
   about: [
-    // TODO(content)
-    'Intro paragraph: who you are, what you do and what you care about. This text is a placeholder.',
-    'Second paragraph: the kind of projects or teams you are looking for and what you bring. Also a placeholder.',
+    "I'm a software engineer and Master's student in Applied Artificial Intelligence, moving toward Data Science and AI engineering.",
+    'I build mobile apps with React Native and TypeScript, and I developed a decision-support application using Python, analytics and unsupervised learning. I presented that research at an international conference. I like building practical AI that turns data into actionable insight.',
   ],
   experience: [
-    // TODO(content)
     {
-      role: 'Sample position',
-      organization: 'Sample company',
-      location: 'City',
-      start: '2024-01',
-      summary: 'Short description of the role (placeholder).',
-      highlights: ['Key achievement or responsibility.', 'Another achievement or responsibility.'],
-      tags: ['TypeScript', 'Astro'],
+      role: 'Mobile Developer & Mobile Technical Lead',
+      organization: 'Ensolvers / Hyros',
+      location: 'Remote',
+      start: '2023-02',
+      highlights: [
+        'Build and maintain a mobile app with React Native, TypeScript and JavaScript.',
+        'Own the mobile workstream technically: architecture, pull requests, code reviews and delivery prioritization.',
+        'Refactored a metrics selector from a flat list into a hierarchical tree with nested submetrics.',
+        'Contribute to a Capacitor-based PWA, adapting web interfaces into responsive mobile layouts.',
+      ],
+      tags: ['React Native', 'TypeScript', 'JavaScript', 'Capacitor', 'Docker', 'Jenkins', 'AWS CloudWatch'],
     },
     {
-      role: 'Previous sample position',
-      organization: 'Another organization',
-      start: '2022-06',
-      end: '2023-12',
-      highlights: ['Key achievement or responsibility.'],
+      role: 'Web Developer, Academic Research Project',
+      organization: 'ESPOCH, Software Engineering Program Commission',
+      location: 'Riobamba, Ecuador',
+      start: '2023',
+      highlights: [
+        'Developed IMAK, a web decision-support app for faculty and students during the graduation process.',
+        'Used Python, KNIME, PostgreSQL and SQL Server for data processing and data-driven features.',
+        'Applied basic analytics and unsupervised learning to group similar graduation and thesis projects.',
+        'Evaluated system quality, information quality, user satisfaction and use.',
+      ],
+      tags: ['Python', 'KNIME', 'PostgreSQL', 'SQL Server'],
+    },
+    {
+      role: 'Web Developer',
+      organization: 'Municipal Government of Riobamba (GADM)',
+      location: 'Riobamba, Ecuador',
+      start: '2022',
+      highlights: [
+        'Developed a web system to support monitoring for the occupational safety and health department.',
+        'Implemented features with React, Node.js, JavaScript, HTML, CSS and Docker.',
+      ],
+      tags: ['React', 'Node.js', 'JavaScript', 'Docker'],
     },
   ],
   education: [
-    // TODO(content)
     {
-      degree: 'Sample degree',
-      institution: 'Sample university',
-      location: 'City',
+      degree: "Master's in Applied Artificial Intelligence",
+      institution: 'Universidad Internacional del Ecuador (UIDE)',
+      start: '2026-01',
+      summary: 'In progress. Expected graduation: January 2027.',
+    },
+    {
+      degree: 'Software Engineering',
+      institution: 'Escuela Superior Politécnica de Chimborazo (ESPOCH)',
+      location: 'Riobamba, Ecuador',
       start: '2018',
-      end: '2022',
-      summary: 'Optional major or detail.',
+      end: '2023',
+      summary: 'Final GPA: 19.34/20. Recognized for the highest graduating average in the program.',
     },
   ],
   skills: [
-    // TODO(content)
     {
-      name: 'Languages',
+      name: 'Programming',
       items: [
-        { name: 'TypeScript', icon: 'typescript' },
         { name: 'Python', icon: 'python' },
+        { name: 'TypeScript', icon: 'typescript' },
+        { name: 'JavaScript', icon: 'javascript' },
+        { name: 'SQL' },
+        { name: 'Java' },
       ],
     },
     {
-      name: 'Frameworks',
-      items: [{ name: 'Astro', icon: 'astro' }, { name: 'Node.js', icon: 'nodedotjs' }],
+      name: 'Data Science & AI',
+      items: [
+        { name: 'Data analytics' },
+        { name: 'Data-driven applications' },
+        { name: 'Machine learning fundamentals' },
+        { name: 'Unsupervised learning & clustering' },
+      ],
     },
     {
-      name: 'Tools',
-      items: [{ name: 'Git', icon: 'git' }, { name: 'Docker', icon: 'docker' }, { name: 'Linux', icon: 'linux' }],
+      name: 'Data tools & databases',
+      items: [
+        { name: 'KNIME', icon: 'knime' },
+        { name: 'PostgreSQL', icon: 'postgresql' },
+        { name: 'SQL Server' },
+        { name: 'MySQL', icon: 'mysql' },
+        { name: 'SQLite', icon: 'sqlite' },
+      ],
+    },
+    {
+      name: 'Software development',
+      items: [
+        { name: 'React Native', icon: 'react' },
+        { name: 'React', icon: 'react' },
+        { name: 'Node.js', icon: 'nodedotjs' },
+        { name: 'Capacitor', icon: 'capacitor' },
+        { name: 'PWA' },
+        { name: 'Streamlit', icon: 'streamlit' },
+        { name: 'Git', icon: 'git' },
+      ],
+    },
+    {
+      name: 'Cloud & DevOps',
+      items: [
+        { name: 'Docker', icon: 'docker' },
+        { name: 'Jenkins', icon: 'jenkins' },
+        { name: 'GitHub Actions', icon: 'githubactions' },
+        { name: 'AWS CloudWatch' },
+      ],
+    },
+    {
+      name: 'Research methods',
+      items: [{ name: 'CRISP-DM' }, { name: 'PLS-SEM' }, { name: 'Scrum' }],
     },
   ],
   languages: [
-    // TODO(content)
     { name: 'Spanish', level: 'Native' },
-    { name: 'English', level: 'Level to be confirmed' },
+    { name: 'English', level: 'C1 (advanced)' },
   ],
-  certifications: [], // TODO(content)
+  certifications: [
+    {
+      name: 'IBM Machine Learning Professional Certificate (in progress)',
+      issuer: 'Coursera',
+    },
+  ],
+  publications: [
+    {
+      title: 'User-Centered Evaluation of a Decision Support System for Degree Completion Management',
+      authors: ['Homero Barragán', 'Gisel Bastidas-Guacho', 'Patricio Moreno-Vallejo', 'Ivonne Rodriguez-Flores'],
+      venue: 'ICAETT 2026',
+      date: '2026-06-04',
+      description: 'Research article based on IMAK, presented at ICAETT 2026 on June 4, 2026.',
+    },
+  ],
   links: {
-    email: undefined, // TODO(content): public contact email
+    email: 'homero.barragan02@outlook.com',
     github: 'https://github.com/homeb01',
-    linkedin: undefined, // TODO(content)
-    cvPdf: undefined, // TODO(content): e.g. '/cv-en.pdf' in public/
+    linkedin: 'https://linkedin.com/in/homeb01',
   },
 };
 

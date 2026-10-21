@@ -22,6 +22,7 @@ const items = [
   { id: 'about', label: t('nav.about'), show: profile.about.length > 0 },
   { id: 'experience', label: t('nav.experience'), show: profile.experience.length > 0 },
   { id: 'education', label: t('nav.education'), show: profile.education.length + (profile.certifications?.length ?? 0) > 0 },
+  { id: 'research', label: t('nav.research'), show: (profile.publications?.length ?? 0) > 0 },
   { id: 'skills', label: t('nav.skills'), show: profile.skills.length > 0 },
   { id: 'projects', label: t('nav.projects'), show: true },
   { id: 'contact', label: t('nav.contact'), show: true },
