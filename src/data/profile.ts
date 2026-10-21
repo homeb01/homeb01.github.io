@@ -53,7 +53,7 @@ export interface EducationItem {
   degree: string;
   institution: string;
   institutionUrl?: string;
-  /** Root-relative path to the institution's logo in public/ (e.g. '/logos/uide.svg'). */
+  /** Name of a monochrome logo in src/assets/logos/ without extension (e.g. 'uide'); falls back to a cap icon. */
   logo?: string;
   location?: string;
   start?: string;
