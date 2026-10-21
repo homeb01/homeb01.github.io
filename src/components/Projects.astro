@@ -1,0 +1,49 @@
+---
+import ArrowRight from '@lucide/astro/icons/arrow-right';
+import SectionHeading from './SectionHeading.astro';
+import ProjectCard from './ProjectCard.astro';
+import EmptyState from './EmptyState.astro';
+import Button from './Button.astro';
+import { localizePath, useTranslations, type Lang } from '../i18n';
+import { getHomeProjects } from '../lib/projects';
+
+interface Props {
+  lang: Lang;
+  eyebrow: string;
+}
+const { lang, eyebrow } = Astro.props;
+const t = useTranslations(lang);
+const { items, total } = await getHomeProjects(lang);
+---
+
+<section id="projects" class="py-20 md:py-28" aria-labelledby="projects-title">
+  <div class="container-page">
+    <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+      <SectionHeading id="projects-title" eyebrow={eyebrow} title={t('projects.title')} lead={t('projects.lead')} />
+      {
+        total > 0 && (
+          <Button href={localizePath('/projects/', lang)} variant="ghost" class="self-start md:self-auto">
+            {t('projects.viewAll')}
+            <ArrowRight class="size-4 transition-transform duration-[250ms] ease-out-soft group-hover:translate-x-0.5" aria-hidden="true" />
+          </Button>
+        )
+      }
+    </div>
+
+    <div class="mt-10 md:mt-14">
+      {
+        items.length > 0 ? (
+          <ul class="grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+            {items.map((project, i) => (
+              <li data-reveal style={`--reveal-delay: ${Math.min(i * 80, 400)}ms`}>
+                <ProjectCard lang={lang} project={project} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <EmptyState lang={lang} />
+        )
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,111 @@
+---
+/** Typography for rendered Markdown (project detail). Uses the design tokens; no plugin needed. */
+---
+
+<div class="prose-content">
+  <slot />
+</div>
+
+<style>
+  .prose-content {
+    max-width: 65ch;
+    font-size: 1.0625rem;
+    line-height: 1.75;
+  }
+  .prose-content > :global(* + *) {
+    margin-top: 1.25em;
+  }
+  .prose-content :global(h2) {
+    margin-top: 2.25em;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  .prose-content :global(h3) {
+    margin-top: 1.75em;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+  .prose-content :global(h2 + *),
+  .prose-content :global(h3 + *) {
+    margin-top: 0.75em;
+  }
+  .prose-content :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  }
+  .prose-content :global(a:hover) {
+    text-decoration-color: var(--color-accent);
+  }
+  .prose-content :global(strong) {
+    font-weight: 600;
+  }
+  .prose-content :global(ul),
+  .prose-content :global(ol) {
+    padding-left: 1.4em;
+  }
+  .prose-content :global(ul) {
+    list-style: disc;
+  }
+  .prose-content :global(ol) {
+    list-style: decimal;
+  }
+  .prose-content :global(li + li) {
+    margin-top: 0.4em;
+  }
+  .prose-content :global(li::marker) {
+    color: var(--color-accent);
+  }
+  .prose-content :global(blockquote) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: 1em;
+    color: var(--color-muted);
+    font-style: italic;
+  }
+  .prose-content :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--color-border);
+    margin-block: 2.5em;
+  }
+  .prose-content :global(img) {
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+  }
+  .prose-content :global(:not(pre) > code) {
+    background: var(--color-surface-2);
+    border-radius: 0.375rem;
+    padding: 0.15em 0.4em;
+    font-size: 0.9em;
+  }
+  .prose-content :global(pre) {
+    overflow-x: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 1rem 1.25rem;
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+  .prose-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+  }
+  .prose-content :global(th),
+  .prose-content :global(td) {
+    border-bottom: 1px solid var(--color-border);
+    padding: 0.5em 0.75em;
+    text-align: left;
+  }
+  /* Shiki dual theme (see astro.config.mjs): light by default, dark with .dark */
+  .prose-content :global(.astro-code),
+  .prose-content :global(.astro-code span) {
+    color: var(--shiki-light);
+    background-color: var(--shiki-light-bg);
+  }
+  :global(.dark) .prose-content :global(.astro-code),
+  :global(.dark) .prose-content :global(.astro-code span) {
+    color: var(--shiki-dark);
+    background-color: var(--shiki-dark-bg);
+  }
+</style>

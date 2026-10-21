@@ -1,0 +1,170 @@
+---
+import Menu from '@lucide/astro/icons/menu';
+import X from '@lucide/astro/icons/x';
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { localizePath, useTranslations, type Lang } from '../i18n';
+import { getProfile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  alternates: Record<Lang, string>;
+  /** Marks the Projects link as current on project pages. */
+  section?: 'home' | 'projects' | 'other';
+}
+
+const { lang, alternates, section = 'other' } = Astro.props;
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+const home = localizePath('/', lang);
+
+const items = [
+  { id: 'about', label: t('nav.about'), show: profile.about.length > 0 },
+  { id: 'experience', label: t('nav.experience'), show: profile.experience.length > 0 },
+  { id: 'education', label: t('nav.education'), show: profile.education.length + (profile.certifications?.length ?? 0) > 0 },
+  { id: 'skills', label: t('nav.skills'), show: profile.skills.length > 0 },
+  { id: 'projects', label: t('nav.projects'), show: true },
+  { id: 'contact', label: t('nav.contact'), show: true },
+].filter((item) => item.show);
+
+const linkClass =
+  'relative py-1 text-muted transition-colors duration-[150ms] hover:text-fg after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:rounded-full after:bg-accent after:transition-transform after:duration-[250ms] after:ease-out-soft data-[active=true]:text-fg data-[active=true]:after:scale-x-100';
+---
+
+<header
+  class="sticky top-0 z-50 h-16 border-b border-transparent bg-bg/80 backdrop-blur-md transition-colors duration-[250ms] data-[scrolled=true]:border-border"
+  data-header
+>
+  <div class="container-page flex h-full items-center justify-between gap-4">
+    <a href={home} class="inline-flex items-center gap-0.5 rounded-sm font-display text-lg font-semibold tracking-tight" aria-label={`${profile.name} — ${t('nav.home')}`}>
+      <span>{profile.initials}</span><span class="size-1.5 translate-y-1 rounded-full bg-accent" aria-hidden="true"></span>
+    </a>
+
+    <nav aria-label={t('nav.label')} class="hidden md:block">
+      <ul class="flex items-center gap-6 text-sm">
+        {
+          items.map((item) => (
+            <li>
+              <a
+                href={`${home}#${item.id}`}
+                class={linkClass}
+                data-nav-link={item.id}
+                data-active={item.id === 'projects' && section === 'projects' ? 'true' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-1">
+      <LanguageSwitcher lang={lang} alternates={alternates} label={t('lang.label')} />
+      <ThemeToggle label={t('theme.toggle')} />
+      <button
+        type="button"
+        class="group relative inline-flex size-11 items-center justify-center rounded-full text-fg hover:bg-surface-2 md:hidden"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+        aria-label={t('nav.menuOpen')}
+        data-label-open={t('nav.menuOpen')}
+        data-label-close={t('nav.menuClose')}
+        data-menu-button
+      >
+        <Menu class="size-6 group-aria-expanded:hidden" aria-hidden="true" />
+        <X class="hidden size-6 group-aria-expanded:block" aria-hidden="true" />
+      </button>
+    </div>
+  </div>
+
+  <div
+    id="mobile-menu"
+    class="absolute inset-x-0 top-full max-h-[calc(100svh-4rem)] -translate-y-2 overflow-y-auto border-b border-border bg-bg opacity-0 transition duration-[250ms] ease-out-soft data-[open=true]:translate-y-0 data-[open=true]:opacity-100 md:hidden"
+    hidden
+    data-menu
+  >
+    <nav aria-label={t('nav.label')} class="container-page py-4">
+      <ul>
+        {
+          items.map((item) => (
+            <li>
+              <a
+                href={`${home}#${item.id}`}
+                class="block py-3 font-display text-2xl font-semibold text-fg transition-colors hover:text-accent data-[active=true]:text-accent"
+                data-nav-link={item.id}
+                data-active={item.id === 'projects' && section === 'projects' ? 'true' : undefined}
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const button = document.querySelector<HTMLButtonElement>('[data-menu-button]');
+  const menu = document.querySelector<HTMLElement>('[data-menu]');
+
+  // Border once the page is scrolled.
+  const onScroll = () => header?.setAttribute('data-scrolled', String(window.scrollY > 8));
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  // Mobile menu.
+  if (button && menu) {
+    let closeTimer: number | undefined;
+    const setOpen = (open: boolean, restoreFocus = false) => {
+      button.setAttribute('aria-expanded', String(open));
+      button.setAttribute('aria-label', (open ? button.dataset.labelClose : button.dataset.labelOpen) ?? '');
+      document.body.style.overflow = open ? 'hidden' : '';
+      window.clearTimeout(closeTimer);
+      if (open) {
+        menu.hidden = false;
+        requestAnimationFrame(() => requestAnimationFrame(() => menu.setAttribute('data-open', 'true')));
+      } else {
+        menu.removeAttribute('data-open');
+        closeTimer = window.setTimeout(() => (menu.hidden = true), 250);
+        if (restoreFocus) button.focus();
+      }
+    };
+    button.addEventListener('click', () => setOpen(button.getAttribute('aria-expanded') !== 'true'));
+    menu.addEventListener('click', (e) => {
+      if ((e.target as HTMLElement).closest('a')) setOpen(false);
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && button.getAttribute('aria-expanded') === 'true') setOpen(false, true);
+    });
+    window.matchMedia('(min-width: 768px)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+
+  // Highlight the nav link of the section in view (home page only).
+  const links = document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]');
+  const sections = [...new Set([...links].map((l) => l.dataset.navLink))]
+    .map((id) => (id ? document.getElementById(id) : null))
+    .filter((el): el is HTMLElement => el !== null);
+  if (sections.length && 'IntersectionObserver' in window) {
+    const inView = new Set<string>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) inView.add(entry.target.id);
+          else inView.delete(entry.target.id);
+        }
+        const current = sections.find((s) => inView.has(s.id))?.id;
+        links.forEach((l) => {
+          if (l.dataset.navLink === current) l.setAttribute('data-active', 'true');
+          else l.removeAttribute('data-active');
+        });
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    sections.forEach((s) => observer.observe(s));
+  }
+</script>

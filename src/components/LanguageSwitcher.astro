@@ -1,0 +1,38 @@
+---
+import { langs, languages, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+  /** Equivalent path of the current page in each language. */
+  alternates: Record<Lang, string>;
+  label: string;
+}
+const { lang, alternates, label } = Astro.props;
+---
+
+<div role="group" aria-label={label} class="flex items-center text-sm">
+  {
+    langs.map((code, i) => (
+      <>
+        {i > 0 && (
+          <span class="text-border-strong" aria-hidden="true">
+            |
+          </span>
+        )}
+        <a
+          href={alternates[code]}
+          hreflang={code}
+          lang={code}
+          aria-label={languages[code]}
+          aria-current={code === lang ? 'true' : undefined}
+          class:list={[
+            'inline-flex h-11 min-w-9 items-center justify-center rounded-sm px-1.5 uppercase transition-colors duration-[150ms]',
+            code === lang ? 'font-semibold text-fg' : 'text-muted hover:text-fg',
+          ]}
+        >
+          {code}
+        </a>
+      </>
+    ))
+  }
+</div>

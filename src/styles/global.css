@@ -1,0 +1,179 @@
+@import "tailwindcss";
+
+/* Dark mode: clase `.dark` en <html> (la gestiona el script del toggle). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Fuentes: se instalan e importan desde el layout (Fontsource), NO aquí.
+ *   @fontsource-variable/bricolage-grotesque  -> "Bricolage Grotesque Variable"
+ *   @fontsource-variable/inter                -> "Inter Variable"
+ */
+
+@theme static {
+  /* Colores semánticos (tema claro por defecto; `.dark` los reemplaza abajo). */
+  --color-bg: #fbfaf8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f3f1ec;
+  --color-fg: #17141f;
+  --color-muted: #5a5668;
+  --color-border: #e6e3dc;
+  --color-border-strong: #8f8a9c;
+  --color-accent: #5b3df5;
+  --color-accent-fg: #ffffff;
+  --color-accent-soft: #ece8ff;
+  --color-accent-soft-fg: #4a2fd0;
+  --color-accent-2: #c2255c;
+  --color-accent-2-soft: #ffe6ee;
+
+  /* Tipografía */
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Bricolage Grotesque Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Radios */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+
+  /* Sombras (suaves, con tinte del acento vía variable de tema) */
+  --shadow-soft: 0 1px 2px var(--shadow-color), 0 8px 24px -12px var(--shadow-color);
+  --shadow-lift: 0 2px 4px var(--shadow-color), 0 20px 40px -16px var(--shadow-color);
+
+  /* Easings y duraciones */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 600ms;
+
+  /* Ancho de contenedor */
+  --container-page: 72rem;
+}
+
+:root {
+  --shadow-color: rgb(40 28 100 / 0.12);
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+  --shadow-color: rgb(0 0 0 / 0.5);
+  --color-bg: #0e0d14;
+  --color-surface: #171521;
+  --color-surface-2: #1e1b2c;
+  --color-fg: #f3f1fa;
+  --color-muted: #a5a1b8;
+  --color-border: #26233a;
+  --color-border-strong: #6e6a82;
+  --color-accent: #a898ff;
+  --color-accent-fg: #0e0d14;
+  --color-accent-soft: #241f40;
+  --color-accent-soft-fg: #c4baff;
+  --color-accent-2: #ff8fb0;
+  --color-accent-2-soft: #3a1c2b;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem; /* alto del header fijo */
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: var(--radius-sm);
+  }
+  /* Transición suave al cambiar de tema (solo colores) */
+  html.theme-transition *,
+  html.theme-transition *::before,
+  html.theme-transition *::after {
+    transition: background-color var(--duration-base) var(--ease-out-soft),
+      color var(--duration-base) var(--ease-out-soft),
+      border-color var(--duration-base) var(--ease-out-soft) !important;
+  }
+}
+
+@layer utilities {
+  /* Texto con degradado de acento (solo para titulares grandes: >= 24px) */
+  .text-gradient {
+    background-image: linear-gradient(100deg, var(--color-accent) 0%, var(--color-accent-2) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  /* Etiqueta pequeña sobre títulos */
+  .eyebrow {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+  /* Contenedor de página */
+  .container-page {
+    width: 100%;
+    max-width: var(--container-page);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+  @media (min-width: 768px) {
+    .container-page { padding-inline: 2rem; }
+  }
+  /* Resplandor decorativo de fondo (hero) */
+  .glow {
+    background:
+      radial-gradient(40rem 24rem at 15% 0%, color-mix(in srgb, var(--color-accent) 18%, transparent), transparent 70%),
+      radial-gradient(32rem 20rem at 90% 10%, color-mix(in srgb, var(--color-accent-2) 14%, transparent), transparent 70%);
+  }
+  /* Solo lectores de pantalla ya existe como `sr-only` en Tailwind */
+}
+
+/*
+ * Reveal al hacer scroll. El layout añade la clase `js` a <html> en un script
+ * inline del <head>; sin JS el contenido es siempre visible.
+ * Un IntersectionObserver pone `data-revealed="true"`.
+ * Retardo escalonado opcional: style="--reveal-delay: 80ms".
+ */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out-soft) var(--reveal-delay, 0ms),
+    transform var(--duration-slow) var(--ease-out-soft) var(--reveal-delay, 0ms);
+}
+html.js [data-reveal][data-revealed="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  html.js [data-reveal] { opacity: 1; transform: none; }
+}

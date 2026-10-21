@@ -1,0 +1,137 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/bricolage-grotesque';
+import '../styles/global.css';
+
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { defaultLang, getAlternatePath, langs, useTranslations, type Lang } from '../i18n';
+import { getProfile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  /** Page title; the site name is appended. Omit on the home page. */
+  title?: string;
+  description?: string;
+  /** Override the language-switcher target per language (e.g. when a page has no translation). */
+  alternates?: Partial<Record<Lang, string>>;
+  /** false when the page has no translated counterpart (hreflang alternates are omitted). */
+  translated?: boolean;
+  /** Absolute or root-relative image URL for Open Graph. */
+  image?: string;
+  type?: 'website' | 'article';
+  section?: 'home' | 'projects' | 'other';
+  noindex?: boolean;
+}
+
+const {
+  lang,
+  title,
+  description,
+  alternates: alternateOverrides = {},
+  translated = true,
+  image,
+  type = 'website',
+  section = 'other',
+  noindex = false,
+} = Astro.props;
+
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+const siteName = profile.name;
+const fullTitle = title ? `${title} · ${siteName}` : `${siteName} · ${profile.role}`;
+const metaDescription = description ?? profile.tagline;
+
+const pathname = Astro.url.pathname;
+const canonical = new URL(pathname, Astro.site);
+const alternates = Object.fromEntries(
+  langs.map((l) => [l, alternateOverrides[l] ?? getAlternatePath(pathname, l)]),
+) as Record<Lang, string>;
+const imageUrl = image ? new URL(image, Astro.site).href : undefined;
+const ogLocale = { es: 'es_ES', en: 'en_US' } as const;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={metaDescription} />
+    <link rel="canonical" href={canonical.href} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {
+      translated &&
+        !noindex &&
+        langs.map((l) => <link rel="alternate" hreflang={l} href={new URL(alternates[l], Astro.site).href} />)
+    }
+    {translated && !noindex && <link rel="alternate" hreflang="x-default" href={new URL(alternates[defaultLang], Astro.site).href} />}
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#FBFAF8" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E0D14" media="(prefers-color-scheme: dark)" />
+    <meta name="generator" content={Astro.generator} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={metaDescription} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:locale" content={ogLocale[lang]} />
+    {langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={ogLocale[l]} />)}
+    {imageUrl && <meta property="og:image" content={imageUrl} />}
+    <meta name="twitter:card" content={imageUrl ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={metaDescription} />
+    {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+
+    <!-- Before paint: enable JS-only styles and apply the saved/system theme (no flash). -->
+    <script is:inline>
+      (() => {
+        const root = document.documentElement;
+        root.classList.add('js');
+        let theme = null;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch (e) {}
+        if (theme === 'dark' || (theme !== 'light' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          root.classList.add('dark');
+        }
+      })();
+    </script>
+  </head>
+  <body class="flex min-h-svh flex-col bg-bg font-sans text-fg">
+    <a
+      href="#main"
+      class="sr-only rounded-full bg-accent px-5 py-3 font-medium text-accent-fg focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60]"
+    >
+      {t('skip')}
+    </a>
+    <Header lang={lang} alternates={alternates} section={section} />
+    <main id="main" tabindex="-1" class="flex-1 focus:outline-none">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+
+    <script>
+      // Reveal on scroll: sets data-revealed="true" once per element (styles in global.css).
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (!('IntersectionObserver' in window)) {
+        items.forEach((el) => (el.dataset.revealed = 'true'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (!entry.isIntersecting) continue;
+              (entry.target as HTMLElement).dataset.revealed = 'true';
+              observer.unobserve(entry.target);
+            }
+          },
+          { threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
+        );
+        items.forEach((el) => observer.observe(el));
+      }
+    </script>
+  </body>
+</html>

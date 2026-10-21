@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import ArrowLeft from '@lucide/astro/icons/arrow-left';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import BrandIcon from '../components/BrandIcon.astro';
+import Chip from '../components/Chip.astro';
+import Prose from '../components/Prose.astro';
+import { langs, localizePath, useTranslations, type Lang } from '../i18n';
+import { getProjects, projectSlug, type ProjectEntry } from '../lib/projects';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  lang: Lang;
+  project: ProjectEntry;
+}
+const { lang, project } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(project);
+const { title, summary, date, tags, cover, coverAlt, repo, demo } = project.data;
+const slug = projectSlug(project);
+
+// Language switcher: same project in the other language if it exists, else that language's listing.
+const alternates: Partial<Record<Lang, string>> = {};
+let translated = true;
+for (const other of langs) {
+  const exists = (await getProjects(other)).some((p) => projectSlug(p) === slug);
+  if (!exists) {
+    alternates[other] = localizePath('/projects/', other);
+    translated = false;
+  }
+}
+const newTab = t('a11y.newTab');
+---
+
+<BaseLayout lang={lang} title={title} description={summary} type="article" section="projects" alternates={alternates} translated={translated} image={cover?.src}>
+  <article class="py-16 md:py-24">
+    <div class="container-page">
+      <a
+        href={localizePath('/projects/', lang)}
+        class="group inline-flex min-h-10 items-center gap-1.5 rounded-sm text-sm font-medium text-muted transition-colors hover:text-fg"
+      >
+        <ArrowLeft class="size-4 transition-transform duration-[250ms] ease-out-soft group-hover:-translate-x-0.5" aria-hidden="true" />
+        {t('projects.back')}
+      </a>
+
+      <header class="mt-6 max-w-4xl" data-reveal>
+        <p class="text-sm text-muted"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date, lang)}</time></p>
+        <h1 class="mt-2 text-4xl font-semibold md:text-6xl">{title}</h1>
+        <p class="mt-4 max-w-prose text-lg text-muted md:text-xl">{summary}</p>
+        {
+          tags.length > 0 && (
+            <ul class="mt-6 flex flex-wrap gap-2" aria-label={t('projects.tech')}>
+              {tags.map((tag) => (
+                <li>
+                  <Chip variant="accent">{tag}</Chip>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+        {
+          (repo || demo) && (
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row" role="group" aria-label={t('projects.links')}>
+              {demo && (
+                <Button href={demo} variant="primary" external newTabLabel={newTab}>
+                  {t('projects.demo')}
+                  <ArrowUpRight class="size-4" aria-hidden="true" />
+                </Button>
+              )}
+              {repo && (
+                <Button href={repo} variant={demo ? 'ghost' : 'primary'} external newTabLabel={newTab}>
+                  <BrandIcon name="github" class="size-4" />
+                  {t('projects.repo')}
+                </Button>
+              )}
+            </div>
+          )
+        }
+      </header>
+
+      {
+        cover && (
+          <Image
+            src={cover}
+            alt={coverAlt ?? ''}
+            widths={[640, 960, 1280, 1600]}
+            sizes="(min-width: 1152px) 72rem, 100vw"
+            class="mt-12 aspect-video w-full rounded-xl border border-border object-cover"
+            loading="eager"
+          />
+        )
+      }
+
+      <div class="mt-12 md:mt-16">
+        <Prose>
+          <Content />
+        </Prose>
+      </div>
+    </div>
+  </article>
+</BaseLayout>

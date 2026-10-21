@@ -1,0 +1,71 @@
+---
+import SectionHeading from './SectionHeading.astro';
+import Chip from './Chip.astro';
+import { useTranslations, type Lang } from '../i18n';
+import { formatYearMonth } from '../lib/format';
+import type { Profile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  profile: Profile;
+  eyebrow: string;
+}
+const { lang, profile, eyebrow } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id="experience" class="py-20 md:py-28" aria-labelledby="experience-title">
+  <div class="container-page grid grid-cols-12 gap-y-10 md:gap-x-8">
+    <div class="col-span-12 md:col-span-4">
+      <SectionHeading id="experience-title" eyebrow={eyebrow} title={t('experience.title')} lead={t('experience.lead')} class="md:sticky md:top-24" />
+    </div>
+    <ol class="col-span-12 md:col-span-8">
+      {
+        profile.experience.map((item, i) => {
+          const current = !item.end;
+          return (
+            <li class="relative border-l border-border pb-12 pl-8 last:pb-0 md:pl-10" data-reveal style={`--reveal-delay: ${Math.min(i * 80, 400)}ms`}>
+              <span class="absolute top-1.5 -left-[6.5px] flex size-3" aria-hidden="true">
+                {current && <span class="absolute inline-flex size-full rounded-full bg-accent opacity-60 motion-safe:animate-ping" />}
+                <span class="relative inline-flex size-3 rounded-full bg-accent ring-4 ring-bg" />
+              </span>
+              <p class="flex flex-wrap items-center gap-2 text-sm text-muted tabular-nums">
+                <span>
+                  {formatYearMonth(item.start, lang)} –{item.end && ` ${formatYearMonth(item.end, lang)}`}
+                </span>
+                {current && <Chip variant="accent" class="h-6 px-2.5 text-xs">{t('experience.present')}</Chip>}
+                {item.location && <span>· {item.location}</span>}
+              </p>
+              <h3 class="mt-2 text-xl font-semibold md:text-[1.375rem]">{item.role}</h3>
+              <p class="mt-1 font-medium text-accent">
+                {item.organizationUrl ? (
+                  <a href={item.organizationUrl} target="_blank" rel="noopener noreferrer" class="underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+                    {item.organization}
+                    <span class="sr-only">{t('a11y.newTab')}</span>
+                  </a>
+                ) : (
+                  item.organization
+                )}
+              </p>
+              {item.summary && <p class="mt-3 max-w-prose text-muted">{item.summary}</p>}
+              {item.highlights && item.highlights.length > 0 && (
+                <ul class="mt-3 max-w-prose list-disc space-y-1.5 pl-5 text-muted marker:text-accent">
+                  {item.highlights.map((h) => <li>{h}</li>)}
+                </ul>
+              )}
+              {item.tags && item.tags.length > 0 && (
+                <ul class="mt-4 flex flex-wrap gap-2">
+                  {item.tags.map((tag) => (
+                    <li>
+                      <Chip variant="accent">{tag}</Chip>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          );
+        })
+      }
+    </ol>
+  </div>
+</section>

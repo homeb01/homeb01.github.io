@@ -1,0 +1,39 @@
+---
+/**
+ * GitHub Pages serves this single /404.html for every missing URL, in both languages.
+ * It renders in Spanish; a tiny inline script switches to the English block under /en/.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import { langs, localizePath, useTranslations } from '../i18n';
+---
+
+<BaseLayout lang="es" title="404" description={useTranslations('es')('notFound.body')} noindex>
+  <section class="glow">
+    <div class="container-page flex min-h-[70svh] flex-col items-center justify-center py-20 text-center">
+      <p class="text-gradient font-display text-8xl font-semibold tracking-tight md:text-9xl" aria-hidden="true">404</p>
+      {
+        langs.map((lang) => {
+          const t = useTranslations(lang);
+          return (
+            <div data-lang-block={lang} lang={lang} hidden={lang !== 'es'}>
+              <h1 class="mt-6 text-3xl font-semibold md:text-5xl">{t('notFound.title')}</h1>
+              <p class="mx-auto mt-4 max-w-md text-lg text-muted">{t('notFound.body')}</p>
+              <Button href={localizePath('/', lang)} class="mt-10">
+                {t('notFound.cta')}
+              </Button>
+            </div>
+          );
+        })
+      }
+    </div>
+  </section>
+  <script is:inline>
+    if (location.pathname.startsWith('/en/') || location.pathname === '/en') {
+      document.documentElement.lang = 'en';
+      document.querySelectorAll('[data-lang-block]').forEach((el) => {
+        el.hidden = el.getAttribute('data-lang-block') !== 'en';
+      });
+    }
+  </script>
+</BaseLayout>

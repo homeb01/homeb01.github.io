@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Experience from '../components/Experience.astro';
+import Education from '../components/Education.astro';
+import Skills from '../components/Skills.astro';
+import Projects from '../components/Projects.astro';
+import Contact from '../components/Contact.astro';
+import { useTranslations, type Lang } from '../i18n';
+import { getProfile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+
+// Sections with no data are hidden; the eyebrow numbers follow the visible ones.
+const visible = {
+  about: profile.about.length > 0,
+  experience: profile.experience.length > 0,
+  education: profile.education.length + (profile.certifications?.length ?? 0) > 0,
+  skills: profile.skills.length > 0,
+  projects: true,
+  contact: true,
+};
+const order = (Object.keys(visible) as (keyof typeof visible)[]).filter((k) => visible[k]);
+const eyebrow = (key: keyof typeof visible) => `${String(order.indexOf(key) + 1).padStart(2, '0')} · ${t(`nav.${key}`)}`;
+---
+
+<BaseLayout lang={lang} section="home">
+  <Hero lang={lang} profile={profile} />
+  {visible.about && <About lang={lang} profile={profile} eyebrow={eyebrow('about')} />}
+  {visible.experience && <Experience lang={lang} profile={profile} eyebrow={eyebrow('experience')} />}
+  {visible.education && <Education lang={lang} profile={profile} eyebrow={eyebrow('education')} />}
+  {visible.skills && <Skills lang={lang} profile={profile} eyebrow={eyebrow('skills')} />}
+  <Projects lang={lang} eyebrow={eyebrow('projects')} />
+  <Contact lang={lang} profile={profile} eyebrow={eyebrow('contact')} />
+</BaseLayout>

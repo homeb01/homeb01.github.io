@@ -1,0 +1,25 @@
+---
+import BrandIcon from './BrandIcon.astro';
+
+interface Props {
+  variant?: 'neutral' | 'accent';
+  /** Simple Icons slug shown on the left (optional). */
+  icon?: string;
+  interactive?: boolean;
+  class?: string;
+}
+
+const { variant = 'neutral', icon, interactive = false, class: className } = Astro.props;
+---
+
+<span
+  class:list={[
+    'inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-sm font-medium transition duration-[250ms] ease-out-soft',
+    variant === 'neutral' ? 'border-border bg-surface-2 text-fg' : 'border-transparent bg-accent-soft text-accent-soft-fg',
+    interactive && 'hover:-translate-y-px hover:border-accent',
+    className,
+  ]}
+>
+  {icon && <BrandIcon name={icon} class="size-4 shrink-0" />}
+  <slot />
+</span>

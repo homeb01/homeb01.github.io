@@ -1,0 +1,58 @@
+---
+import ArrowUp from '@lucide/astro/icons/arrow-up';
+import Mail from '@lucide/astro/icons/mail';
+import BrandIcon from './BrandIcon.astro';
+import { useTranslations, type Lang } from '../i18n';
+import { getProfile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+const year = new Date().getFullYear();
+
+const iconLink =
+  'inline-flex size-10 items-center justify-center rounded-full text-muted transition duration-[150ms] ease-out-soft hover:-translate-y-0.5 hover:bg-surface-2 hover:text-fg';
+---
+
+<footer class="border-t border-border py-10">
+  <div class="container-page flex flex-col items-center gap-6 text-center md:flex-row md:justify-between md:text-left">
+    <p class="text-sm text-muted">© {year} {profile.name}. {t('footer.rights')}</p>
+
+    <ul class="flex items-center gap-1" aria-label={t('footer.social')}>
+      <li>
+        <a href={profile.links.github} class={iconLink} target="_blank" rel="noopener noreferrer me">
+          <BrandIcon name="github" class="size-5" />
+          <span class="sr-only">GitHub {t('a11y.newTab')}</span>
+        </a>
+      </li>
+      {
+        profile.links.linkedin && (
+          <li>
+            <a href={profile.links.linkedin} class={iconLink} target="_blank" rel="noopener noreferrer me">
+              <BrandIcon name="linkedin" class="size-5" />
+              <span class="sr-only">LinkedIn {t('a11y.newTab')}</span>
+            </a>
+          </li>
+        )
+      }
+      {
+        profile.links.email && (
+          <li>
+            <a href={`mailto:${profile.links.email}`} class={iconLink}>
+              <Mail class="size-5" aria-hidden="true" />
+              <span class="sr-only">Email</span>
+            </a>
+          </li>
+        )
+      }
+    </ul>
+
+    <a href="#main" class="group inline-flex min-h-10 items-center gap-1.5 rounded-sm text-sm text-muted transition-colors hover:text-fg">
+      {t('footer.backToTop')}
+      <ArrowUp class="size-4 transition-transform duration-[250ms] ease-out-soft group-hover:-translate-y-0.5" aria-hidden="true" />
+    </a>
+  </div>
+</footer>

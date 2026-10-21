@@ -1,0 +1,38 @@
+---
+import Sun from '@lucide/astro/icons/sun';
+import Moon from '@lucide/astro/icons/moon';
+
+interface Props {
+  label: string;
+}
+const { label } = Astro.props;
+---
+
+<button
+  type="button"
+  class="relative inline-flex size-11 items-center justify-center rounded-full text-fg transition duration-[250ms] ease-out-soft hover:bg-surface-2"
+  aria-label={label}
+  aria-pressed="false"
+  data-theme-toggle
+>
+  <Moon class="absolute size-5 transition duration-[250ms] ease-out-soft dark:rotate-90 dark:opacity-0" aria-hidden="true" />
+  <Sun class="absolute size-5 -rotate-90 opacity-0 transition duration-[250ms] ease-out-soft dark:rotate-0 dark:opacity-100" aria-hidden="true" />
+</button>
+
+<script>
+  const root = document.documentElement;
+  const buttons = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+  const sync = () => buttons.forEach((b) => b.setAttribute('aria-pressed', String(root.classList.contains('dark'))));
+  sync();
+  buttons.forEach((button) =>
+    button.addEventListener('click', () => {
+      root.classList.add('theme-transition');
+      const dark = root.classList.toggle('dark');
+      try {
+        localStorage.setItem('theme', dark ? 'dark' : 'light');
+      } catch {}
+      sync();
+      window.setTimeout(() => root.classList.remove('theme-transition'), 300);
+    }),
+  );
+</script>

@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import FolderCode from '@lucide/astro/icons/folder-code';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import BrandIcon from './BrandIcon.astro';
+import Chip from './Chip.astro';
+import { localizePath, useTranslations, type Lang } from '../i18n';
+import { projectSlug, type ProjectEntry } from '../lib/projects';
+import { formatDate } from '../lib/format';
+
+interface Props {
+  lang: Lang;
+  project: ProjectEntry;
+  headingLevel?: 'h2' | 'h3';
+}
+const { lang, project, headingLevel: Heading = 'h3' } = Astro.props;
+const t = useTranslations(lang);
+const { title, summary, tags, cover, coverAlt, repo, demo, date } = project.data;
+const href = localizePath(`/projects/${projectSlug(project)}/`, lang);
+const secondary = 'relative z-10 inline-flex min-h-10 items-center gap-1.5 rounded-sm text-sm font-medium text-muted transition-colors hover:text-accent';
+---
+
+<article
+  class="group relative flex h-full flex-col overflow-hidden rounded-lg border border-border bg-surface shadow-soft transition duration-[250ms] ease-out-soft hover:-translate-y-1 hover:border-accent/50 hover:shadow-lift"
+>
+  <div class="aspect-video overflow-hidden">
+    {
+      cover ? (
+        <Image
+          src={cover}
+          alt={coverAlt ?? ''}
+          widths={[400, 640, 960]}
+          sizes="(min-width: 1024px) 22rem, (min-width: 768px) 50vw, 100vw"
+          class="size-full object-cover transition-transform duration-[600ms] ease-out-soft group-hover:scale-105"
+        />
+      ) : (
+        <div
+          class="grid size-full place-items-center bg-accent-soft bg-[radial-gradient(circle_at_30%_20%,color-mix(in_srgb,var(--color-accent)_22%,transparent),transparent_60%),radial-gradient(circle_at_80%_90%,color-mix(in_srgb,var(--color-accent-2)_18%,transparent),transparent_55%)] transition-transform duration-[600ms] ease-out-soft group-hover:scale-105"
+          aria-hidden="true"
+        >
+          <FolderCode class="size-10 text-accent-soft-fg" />
+        </div>
+      )
+    }
+  </div>
+
+  <div class="flex flex-1 flex-col p-5 md:p-6">
+    <p class="text-sm text-muted"><time datetime={date.toISOString().slice(0, 10)}>{formatDate(date, lang)}</time></p>
+    <Heading class="mt-1 text-xl font-semibold md:text-[1.375rem]">
+      <a href={href} class="rounded-sm after:absolute after:inset-0 after:content-[''] focus-visible:outline-none group-focus-within:text-accent hover:text-accent">
+        {title}
+      </a>
+    </Heading>
+    <p class="mt-2 line-clamp-3 text-muted">{summary}</p>
+
+    {
+      tags.length > 0 && (
+        <ul class="mt-4 flex flex-wrap gap-2" aria-label={t('projects.tech')}>
+          {tags.slice(0, 4).map((tag) => (
+            <li>
+              <Chip variant="accent">{tag}</Chip>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      (repo || demo) && (
+        <div class="mt-auto flex items-center gap-4 pt-5">
+          {demo && (
+            <a href={demo} target="_blank" rel="noopener noreferrer" class={secondary}>
+              <ArrowUpRight class="size-4" aria-hidden="true" />
+              {t('projects.demo')}
+              <span class="sr-only">{`${title} ${t('a11y.newTab')}`}</span>
+            </a>
+          )}
+          {repo && (
+            <a href={repo} target="_blank" rel="noopener noreferrer" class={secondary}>
+              <BrandIcon name="github" class="size-4" />
+              {t('projects.repo')}
+              <span class="sr-only">{`${title} ${t('a11y.newTab')}`}</span>
+            </a>
+          )}
+        </div>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  /* Card-wide link: show the focus ring on the whole card when the title link is focused. */
+  article:has(> div a[href]:not([target]):focus-visible) {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+</style>

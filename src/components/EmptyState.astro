@@ -1,0 +1,33 @@
+---
+import Sparkles from '@lucide/astro/icons/sparkles';
+import Button from './Button.astro';
+import BrandIcon from './BrandIcon.astro';
+import { useTranslations, type Lang } from '../i18n';
+import { getProfile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  headingLevel?: 'h2' | 'h3';
+}
+const { lang, headingLevel: Heading = 'h3' } = Astro.props;
+const t = useTranslations(lang);
+const profile = getProfile(lang);
+---
+
+<div class="relative overflow-hidden rounded-xl border border-dashed border-border-strong bg-surface-2/50 p-10 text-center md:p-16" data-reveal>
+  <div class="pointer-events-none absolute inset-x-0 -top-10 hidden justify-center gap-6 opacity-40 md:flex" aria-hidden="true">
+    <div class="h-24 w-48 rotate-[-6deg] rounded-lg border border-border bg-surface motion-safe:animate-pulse"></div>
+    <div class="h-24 w-48 rotate-[5deg] rounded-lg border border-border bg-surface motion-safe:animate-pulse"></div>
+  </div>
+  <div class="relative">
+    <span class="mx-auto grid size-14 place-items-center rounded-full bg-accent-soft" aria-hidden="true">
+      <Sparkles class="size-8 text-accent" />
+    </span>
+    <Heading class="mt-6 text-2xl font-semibold md:text-3xl">{t('projects.empty.title')}</Heading>
+    <p class="mx-auto mt-3 max-w-md text-muted">{t('projects.empty.body')}</p>
+    <Button href={profile.links.github} variant="ghost" external newTabLabel={t('a11y.newTab')} class="mt-8">
+      <BrandIcon name="github" class="size-4" />
+      {t('projects.empty.cta')}
+    </Button>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+---
+import MapPin from '@lucide/astro/icons/map-pin';
+import Languages from '@lucide/astro/icons/languages';
+import SectionHeading from './SectionHeading.astro';
+import Chip from './Chip.astro';
+import { useTranslations, type Lang } from '../i18n';
+import type { Profile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  profile: Profile;
+  eyebrow: string;
+}
+const { lang, profile, eyebrow } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section id="about" class="py-20 md:py-28" aria-labelledby="about-title">
+  <div class="container-page grid grid-cols-12 gap-y-10 md:gap-x-8">
+    <div class="col-span-12 md:col-span-4">
+      <SectionHeading id="about-title" eyebrow={eyebrow} title={t('about.title')} class="md:sticky md:top-24" />
+    </div>
+    <div class="col-span-12 space-y-5 md:col-span-8" data-reveal style="--reveal-delay: 80ms">
+      {profile.about.map((paragraph) => <p class="max-w-prose text-lg">{paragraph}</p>)}
+
+      {
+        (profile.location || profile.languages.length > 0) && (
+          <dl class="flex flex-col gap-4 pt-4 sm:flex-row sm:flex-wrap sm:gap-8">
+            {profile.location && (
+              <div>
+                <dt class="text-sm font-semibold text-muted">{t('about.location')}</dt>
+                <dd class="mt-2">
+                  <Chip>
+                    <MapPin class="size-4 text-accent" aria-hidden="true" />
+                    {profile.location}
+                  </Chip>
+                </dd>
+              </div>
+            )}
+            {profile.languages.length > 0 && (
+              <div>
+                <dt class="text-sm font-semibold text-muted">{t('about.languages')}</dt>
+                <dd class="mt-2 flex flex-wrap gap-2">
+                  {profile.languages.map((l) => (
+                    <Chip>
+                      <Languages class="size-4 text-accent" aria-hidden="true" />
+                      {l.name}
+                      <span class="text-muted">· {l.level}</span>
+                    </Chip>
+                  ))}
+                </dd>
+              </div>
+            )}
+          </dl>
+        )
+      }
+    </div>
+  </div>
+</section>

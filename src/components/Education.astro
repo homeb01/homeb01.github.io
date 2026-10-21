@@ -1,0 +1,106 @@
+---
+import GraduationCap from '@lucide/astro/icons/graduation-cap';
+import Award from '@lucide/astro/icons/award';
+import ArrowUpRight from '@lucide/astro/icons/arrow-up-right';
+import SectionHeading from './SectionHeading.astro';
+import { useTranslations, type Lang } from '../i18n';
+import { formatYearMonth } from '../lib/format';
+import type { Profile } from '../data/profile';
+
+interface Props {
+  lang: Lang;
+  profile: Profile;
+  eyebrow: string;
+}
+const { lang, profile, eyebrow } = Astro.props;
+const t = useTranslations(lang);
+const certifications = profile.certifications ?? [];
+
+function period(start: string | undefined, end: string | undefined): string {
+  const from = start ? formatYearMonth(start, lang) : '';
+  const to = end ? formatYearMonth(end, lang) : t('experience.present');
+  return from ? `${from} – ${to}` : to;
+}
+
+const card = 'rounded-lg border border-border bg-surface p-5 shadow-soft md:p-6';
+---
+
+<section id="education" class="py-20 md:py-28" aria-labelledby="education-title">
+  <div class="container-page">
+    <SectionHeading id="education-title" eyebrow={eyebrow} title={t('education.title')} lead={t('education.lead')} />
+
+    {
+      profile.education.length > 0 && (
+        <ul class="mt-10 grid gap-5 md:mt-14 md:grid-cols-2 md:gap-6">
+          {profile.education.map((item, i) => (
+            <li class={card} data-reveal style={`--reveal-delay: ${Math.min(i * 80, 400)}ms`}>
+              <div class="flex items-start gap-4">
+                <span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-soft text-accent-soft-fg" aria-hidden="true">
+                  <GraduationCap class="size-5" />
+                </span>
+                <div>
+                  <p class="text-sm text-muted tabular-nums">
+                    {period(item.start, item.end)}
+                    {item.location && <span> · {item.location}</span>}
+                  </p>
+                  <h3 class="mt-1 text-xl font-semibold md:text-[1.375rem]">{item.degree}</h3>
+                  <p class="mt-1 font-medium text-accent">
+                    {item.institutionUrl ? (
+                      <a href={item.institutionUrl} target="_blank" rel="noopener noreferrer" class="underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+                        {item.institution}
+                        <span class="sr-only">{t('a11y.newTab')}</span>
+                      </a>
+                    ) : (
+                      item.institution
+                    )}
+                  </p>
+                  {item.summary && <p class="mt-3 text-muted">{item.summary}</p>}
+                  {item.highlights && item.highlights.length > 0 && (
+                    <ul class="mt-3 list-disc space-y-1.5 pl-5 text-muted marker:text-accent">
+                      {item.highlights.map((h) => <li>{h}</li>)}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      certifications.length > 0 && (
+        <div class="mt-14">
+          <h3 class="text-sm font-semibold tracking-wide text-muted uppercase" data-reveal>
+            {t('education.certifications')}
+          </h3>
+          <ul class="mt-5 grid gap-5 md:grid-cols-2 md:gap-6">
+            {certifications.map((c, i) => (
+              <li class:list={[card, 'relative flex items-start gap-4']} data-reveal style={`--reveal-delay: ${Math.min(i * 80, 400)}ms`}>
+                <span class="grid size-10 shrink-0 place-items-center rounded-full bg-accent-2-soft text-accent-2" aria-hidden="true">
+                  <Award class="size-5" />
+                </span>
+                <div>
+                  <p class="font-display text-lg font-semibold">
+                    {c.url ? (
+                      <a href={c.url} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 hover:text-accent">
+                        {c.name}
+                        <ArrowUpRight class="size-4" aria-hidden="true" />
+                        <span class="sr-only">{t('a11y.newTab')}</span>
+                      </a>
+                    ) : (
+                      c.name
+                    )}
+                  </p>
+                  {(c.issuer || c.date) && (
+                    <p class="mt-1 text-sm text-muted">{[c.issuer, c.date && formatYearMonth(c.date, lang)].filter(Boolean).join(' · ')}</p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+  </div>
+</section>

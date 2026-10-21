@@ -1,0 +1,16 @@
+# local only (never public)
+CLAUDE.md
+.claude/
+.obsidian/
+
+# build / deps
+node_modules/
+dist/
+.astro/
+
+# env & misc
+.env
+.env.*
+!.env.example
+.DS_Store
+npm-debug.log*

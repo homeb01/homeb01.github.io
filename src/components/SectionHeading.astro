@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** Small label above the title, e.g. "01 · Sobre mí". */
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  id?: string;
+  as?: 'h1' | 'h2';
+  class?: string;
+}
+
+const { eyebrow, title, lead, id, as: Tag = 'h2', class: className } = Astro.props;
+---
+
+<header class:list={['max-w-prose', className]} data-reveal>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Tag id={id} class:list={['font-semibold', eyebrow && 'mt-3', Tag === 'h1' ? 'text-4xl md:text-6xl' : 'text-3xl md:text-5xl']}>
+    {title}
+  </Tag>
+  {lead && <p class="mt-4 text-lg text-muted">{lead}</p>}
+</header>

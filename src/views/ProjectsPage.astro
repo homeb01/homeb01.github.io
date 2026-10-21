@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import EmptyState from '../components/EmptyState.astro';
+import { useTranslations, type Lang } from '../i18n';
+import { getProjects } from '../lib/projects';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const projects = await getProjects(lang);
+---
+
+<BaseLayout lang={lang} title={t('projects.pageTitle')} description={t('projects.pageDescription')} section="projects">
+  <section class="glow py-20 md:py-28">
+    <div class="container-page">
+      <SectionHeading as="h1" eyebrow={t('nav.projects')} title={t('projects.title')} lead={t('projects.lead')} />
+      <div class="mt-10 md:mt-14">
+        {
+          projects.length > 0 ? (
+            <ul class="grid gap-5 md:grid-cols-2 md:gap-6 lg:grid-cols-3">
+              {projects.map((project, i) => (
+                <li data-reveal style={`--reveal-delay: ${Math.min(i * 80, 400)}ms`}>
+                  <ProjectCard lang={lang} project={project} headingLevel="h2" />
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <EmptyState lang={lang} headingLevel="h2" />
+          )
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
