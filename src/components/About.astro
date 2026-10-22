@@ -3,6 +3,7 @@ import MapPin from '@lucide/astro/icons/map-pin';
 import Languages from '@lucide/astro/icons/languages';
 import SectionHeading from './SectionHeading.astro';
 import Chip from './Chip.astro';
+import Beyond from './Beyond.astro';
 import { useTranslations, type Lang } from '../i18n';
 import type { Profile } from '../data/profile';
 
@@ -13,6 +14,8 @@ interface Props {
 }
 const { lang, profile, eyebrow } = Astro.props;
 const t = useTranslations(lang);
+const personal = profile.personal;
+const showPersonal = !!personal && personal.intro.length + personal.interests.length + personal.gallery.length > 0;
 ---
 
 <section id="about" class="py-20 md:py-28" aria-labelledby="about-title">
@@ -56,4 +59,9 @@ const t = useTranslations(lang);
       }
     </div>
   </div>
+  {showPersonal && personal && (
+    <div class="container-page">
+      <Beyond lang={lang} personal={personal} />
+    </div>
+  )}
 </section>

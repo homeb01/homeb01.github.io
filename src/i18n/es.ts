@@ -28,6 +28,12 @@ const es = {
   'about.title': 'Sobre mí',
   'about.location': 'Ubicación',
   'about.languages': 'Idiomas',
+  'beyond.interests': 'Lo que disfruto',
+  'beyond.gallery': 'Algunos momentos',
+  'beyond.galleryLabel': 'Galería de fotos',
+  'beyond.prev': 'Foto anterior',
+  'beyond.next': 'Foto siguiente',
+  'beyond.slide': '{n} de {total}',
 
   'experience.title': 'Experiencia',
   'experience.lead': 'Dónde he trabajado y qué he aprendido por el camino.',

@@ -1,5 +1,11 @@
 import type { Profile } from './profile';
 import photo from '../assets/profile/homero.png';
+import machuPicchu from '../assets/personal/01-machu-picchu.jpg';
+import cerroPunay from '../assets/personal/02-cerro-punay.jpg';
+import chimborazo from '../assets/personal/03-chimborazo.jpg';
+import uyuni from '../assets/personal/04-uyuni.jpg';
+import mangahurco from '../assets/personal/05-mangahurco.jpg';
+import alausi from '../assets/personal/06-alausi.jpg';
 
 const profile: Profile = {
   name: 'Homero Barragán',
@@ -150,6 +156,55 @@ const profile: Profile = {
     email: 'homero.barragan02@outlook.com',
     github: 'https://github.com/homeb01',
     linkedin: 'https://linkedin.com/in/homeb01',
+  },
+  personal: {
+    eyebrow: 'Más allá del código',
+    title: 'Un poco más sobre mí',
+    lead: 'Lo que hago cuando no estoy frente al teclado.',
+    intro: [
+      'Soy Homero, tengo {age} años, vivo en Riobamba y tengo una mascota llamada Ulises. Desde pequeño me apasionó el mundo de la computación, y esa curiosidad nunca se me quitó.',
+      'Mi objetivo es ayudar a mi comunidad a través de mi trabajo. Me encanta enseñar y aprender, y trato de hacer ambas cosas todos los días.',
+    ],
+    interests: [
+      { icon: 'book-open', title: 'Lectura', text: 'Disfruto muchísimo leer, página tras página.' },
+      { icon: 'coffee', title: 'Café', text: 'Lo amo, y es parte de mi día a día.' },
+      { icon: 'chef-hat', title: 'Cocina', text: 'En mis ratos libres, me gusta cocinar.' },
+      { icon: 'plane', title: 'Viajar', text: 'Me encanta conocer lugares nuevos.' },
+      { icon: 'mountain', title: 'Caminatas largas', text: 'Caminar horas fuera de la ciudad me recarga.' },
+      { icon: 'graduation-cap', title: 'Enseñar y aprender', text: 'Disfruto compartir lo que sé y aprender de otros.' },
+    ],
+    gallery: [
+      {
+        src: machuPicchu,
+        alt: 'Homero sonríe y hace el símbolo de la paz en una selfi, con las ruinas de Machu Picchu y la montaña Huayna Picchu detrás',
+        caption: 'Machu Picchu, Perú',
+      },
+      {
+        src: cerroPunay,
+        alt: 'Homero, con chaqueta roja, señala a la cámara en la cima de una montaña al amanecer, sobre un mar de nubes',
+        caption: 'Cerro Puñay, Ecuador',
+      },
+      {
+        src: chimborazo,
+        alt: 'Homero de pie en la nieve junto al letrero de la laguna Cóndor Cocha, a 5100 m en el Chimborazo',
+        caption: 'Chimborazo, Ecuador',
+      },
+      {
+        src: uyuni,
+        alt: 'La silueta de Homero reflejada en el Salar de Uyuni, convertido en espejo al atardecer',
+        caption: 'Salar de Uyuni, Bolivia',
+      },
+      {
+        src: mangahurco,
+        alt: 'Homero, con sombrero, mira los guayacanes con su floración amarilla',
+        caption: 'Mangahurco, Ecuador',
+      },
+      {
+        src: alausi,
+        alt: 'Homero con amigos después de una carrera en Alausí, con sus medallas',
+        caption: 'Alausí, Ecuador',
+      },
+    ],
   },
 };
 

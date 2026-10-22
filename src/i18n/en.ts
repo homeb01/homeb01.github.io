@@ -30,6 +30,12 @@ const en: Record<keyof typeof es, string> = {
   'about.title': 'About me',
   'about.location': 'Location',
   'about.languages': 'Languages',
+  'beyond.interests': 'Things I enjoy',
+  'beyond.gallery': 'A few moments',
+  'beyond.galleryLabel': 'Photo gallery',
+  'beyond.prev': 'Previous photo',
+  'beyond.next': 'Next photo',
+  'beyond.slide': '{n} of {total}',
 
   'experience.title': 'Experience',
   'experience.lead': "Where I've worked and what I've learned along the way.",

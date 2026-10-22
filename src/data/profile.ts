@@ -33,6 +33,38 @@ export interface Profile {
   /** Research articles / papers (optional; empty or missing hides the section). */
   publications?: Publication[];
   links: ProfileLinks;
+  /** "Beyond the code" subsection inside About (optional; missing or empty hides it). */
+  personal?: PersonalSection;
+}
+
+export interface PersonalSection {
+  /** Small label above the subsection title, e.g. 'Beyond the code'. */
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  /** One string per paragraph. `{age}` is replaced at build time (see src/lib/age.ts). */
+  intro: string[];
+  interests: Interest[];
+  /** Horizontal photos, normalized by scripts/normalize-photos.mjs into src/assets/personal/. */
+  gallery: GalleryPhoto[];
+}
+
+export interface Interest {
+  /** Lucide icon name registered in src/components/Interests.astro (e.g. 'book-open'). */
+  icon: InterestIcon;
+  title: string;
+  text: string;
+}
+
+export type InterestIcon = 'book-open' | 'coffee' | 'chef-hat' | 'plane' | 'mountain' | 'graduation-cap';
+
+export interface GalleryPhoto {
+  /** Import it from src/assets/personal/. */
+  src: ImageMetadata;
+  /** Describes what is visible in the photo (always required). */
+  alt: string;
+  /** Short place/occasion shown on the photo, e.g. 'Machu Picchu, Peru'. Optional. */
+  caption?: string;
 }
 
 export interface ExperienceItem {

@@ -1,5 +1,11 @@
 import type { Profile } from './profile';
 import photo from '../assets/profile/homero.png';
+import machuPicchu from '../assets/personal/01-machu-picchu.jpg';
+import cerroPunay from '../assets/personal/02-cerro-punay.jpg';
+import chimborazo from '../assets/personal/03-chimborazo.jpg';
+import uyuni from '../assets/personal/04-uyuni.jpg';
+import mangahurco from '../assets/personal/05-mangahurco.jpg';
+import alausi from '../assets/personal/06-alausi.jpg';
 
 const profile: Profile = {
   name: 'Homero Barragán',
@@ -150,6 +156,55 @@ const profile: Profile = {
     email: 'homero.barragan02@outlook.com',
     github: 'https://github.com/homeb01',
     linkedin: 'https://linkedin.com/in/homeb01',
+  },
+  personal: {
+    eyebrow: 'Beyond the code',
+    title: 'A bit more about me',
+    lead: "What I do when I'm not at the keyboard.",
+    intro: [
+      "I'm Homero, I'm {age}, I live in Riobamba and I have a pet named Ulises. I've been drawn to computers since I was a kid, and that curiosity never really went away.",
+      'My goal is simple: to help my community through my work. I love teaching and I love learning, and I try to do both every day.',
+    ],
+    interests: [
+      { icon: 'book-open', title: 'Reading', text: 'I read a lot, and I enjoy every page.' },
+      { icon: 'coffee', title: 'Coffee', text: 'I love it, and it keeps my days running.' },
+      { icon: 'chef-hat', title: 'Cooking', text: 'In my free time, I like to cook.' },
+      { icon: 'plane', title: 'Travelling', text: 'I love discovering new places.' },
+      { icon: 'mountain', title: 'Long hikes', text: 'Walking for hours outside the city is my reset.' },
+      { icon: 'graduation-cap', title: 'Teach & learn', text: 'I enjoy sharing what I know and learning from others.' },
+    ],
+    gallery: [
+      {
+        src: machuPicchu,
+        alt: 'Homero smiling and making a peace sign in a selfie, with the Machu Picchu ruins and Huayna Picchu mountain behind him',
+        caption: 'Machu Picchu, Peru',
+      },
+      {
+        src: cerroPunay,
+        alt: 'Homero in a red jacket pointing at the camera on a mountaintop at sunrise, above a sea of clouds',
+        caption: 'Cerro Puñay, Ecuador',
+      },
+      {
+        src: chimborazo,
+        alt: 'Homero standing in the snow next to the Cóndor Cocha lagoon sign, at 5,100 m on Chimborazo',
+        caption: 'Chimborazo, Ecuador',
+      },
+      {
+        src: uyuni,
+        alt: "Homero's silhouette reflected on the mirror-like Salar de Uyuni at sunset",
+        caption: 'Salar de Uyuni, Bolivia',
+      },
+      {
+        src: mangahurco,
+        alt: 'Homero in a sun hat looking at guayacán trees in full yellow bloom',
+        caption: 'Mangahurco, Ecuador',
+      },
+      {
+        src: alausi,
+        alt: 'Homero with friends after a running race in Alausí, wearing finisher medals',
+        caption: 'Alausí, Ecuador',
+      },
+    ],
   },
 };
 

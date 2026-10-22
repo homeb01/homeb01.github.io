@@ -1,0 +1,56 @@
+---
+import BookOpen from '@lucide/astro/icons/book-open';
+import Coffee from '@lucide/astro/icons/coffee';
+import ChefHat from '@lucide/astro/icons/chef-hat';
+import Plane from '@lucide/astro/icons/plane';
+import Mountain from '@lucide/astro/icons/mountain';
+import GraduationCap from '@lucide/astro/icons/graduation-cap';
+import type { Interest, InterestIcon } from '../data/profile';
+
+interface Props {
+  title: string;
+  items: Interest[];
+}
+const { title, items } = Astro.props;
+
+/** To use a new Lucide icon: import it here and add its name to `InterestIcon` in src/data/profile.ts. */
+const icons: Record<InterestIcon, typeof BookOpen> = {
+  'book-open': BookOpen,
+  coffee: Coffee,
+  'chef-hat': ChefHat,
+  plane: Plane,
+  mountain: Mountain,
+  'graduation-cap': GraduationCap,
+};
+---
+
+<div>
+  <h4 class="text-sm font-semibold tracking-wider text-muted uppercase">{title}</h4>
+  <ul class="mt-4 grid grid-cols-2 gap-3 lg:grid-cols-3">
+    {
+      items.map((item, i) => {
+        const Icon = icons[item.icon];
+        return (
+          <li
+            class="flex flex-col gap-3 rounded-lg border border-border bg-surface p-4 shadow-soft sm:flex-row sm:items-start"
+            data-reveal
+            style={`--reveal-delay: ${Math.min(i * 60, 300)}ms`}
+          >
+            <span
+              class:list={[
+                'grid size-10 shrink-0 place-items-center rounded-full',
+                i % 2 === 0 ? 'bg-accent-soft text-accent-soft-fg' : 'bg-accent-2-soft text-accent-2',
+              ]}
+            >
+              <Icon class="size-5" aria-hidden="true" />
+            </span>
+            <span class="min-w-0">
+              <span class="block font-display font-semibold leading-snug">{item.title}</span>
+              <span class="mt-1 block text-sm leading-relaxed text-muted">{item.text}</span>
+            </span>
+          </li>
+        );
+      })
+    }
+  </ul>
+</div>

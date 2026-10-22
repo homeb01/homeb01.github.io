@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # Weekly rebuild so time-based content (e.g. age) stays current.
+  schedule:
+    - cron: '0 6 * * 1'
 
 permissions:
   contents: read
@@ -20,6 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: withastro/action@v6
+        env:
+          BIRTH_DATE: ${{ vars.BIRTH_DATE }}
         with:
           node-version: 24
           package-manager: npm
