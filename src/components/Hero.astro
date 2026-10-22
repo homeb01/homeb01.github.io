@@ -22,14 +22,14 @@ const social = [
 ---
 
 <section class="glow relative" aria-labelledby="hero-title">
-  <div class="container-page grid min-h-[calc(100svh-4rem)] grid-cols-12 items-center gap-y-8 md:gap-x-8 pt-16 pb-20">
-    <div class="hidden lg:col-span-4 lg:block" data-reveal style="--reveal-delay: 240ms">
+  <div class="container-page grid min-h-[calc(100svh-4rem)] grid-cols-1 items-center gap-y-8 pt-16 pb-20 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)_minmax(0,0.85fr)] lg:gap-x-10 xl:gap-x-16">
+    <div class="hidden lg:block" data-reveal style="--reveal-delay: 240ms">
       <CodingScene lang={lang} initials={profile.initials} />
     </div>
 
-    <div class="col-span-12 lg:col-span-5">
+    <div class="lg:col-start-2 lg:row-start-1">
       <p class="eyebrow" data-reveal>{t('hero.greeting')}</p>
-      <h1 id="hero-title" class="mt-4 text-4xl font-semibold md:text-7xl lg:text-5xl xl:text-6xl" data-reveal style="--reveal-delay: 80ms">
+      <h1 id="hero-title" class="mt-4 text-4xl font-semibold md:text-7xl lg:text-4xl xl:text-5xl 2xl:text-6xl" data-reveal style="--reveal-delay: 80ms">
         {profile.name}
         <span class="mt-1 block text-gradient pb-1">{profile.headline}</span>
       </h1>
@@ -64,18 +64,27 @@ const social = [
       </div>
     </div>
 
-    <div class="hidden lg:col-span-3 lg:block" data-reveal style="--reveal-delay: 320ms">
-      {
-        profile.photo ? (
-          <Image
-            src={profile.photo.src}
-            alt={profile.photo.alt}
-            widths={[320, 480, 640]}
-            sizes="(min-width: 1024px) 22rem, 100vw"
-            class="aspect-[4/5] w-full rounded-xl object-cover shadow-lift"
-            loading="eager"
-          />
-        ) : (
+    {
+      profile.photo ? (
+        <div class="order-first mx-0 w-32 md:w-40 lg:order-none lg:col-start-3 lg:row-start-1 lg:mx-auto lg:w-full lg:max-w-[18rem]" data-reveal style="--reveal-delay: 320ms">
+          <div class="relative">
+            <div class="absolute inset-0 rotate-6 rounded-xl bg-accent-2-soft" aria-hidden="true" />
+            <div class="relative -rotate-2 overflow-hidden rounded-xl border border-border bg-[linear-gradient(160deg,var(--color-accent-soft),var(--color-accent-2-soft))] shadow-lift">
+              <Image
+                src={profile.photo.src}
+                alt={profile.photo.alt}
+                width={472}
+                height={591}
+                widths={[256, 384, 472]}
+                sizes="(min-width: 1024px) 18rem, 10rem"
+                class="block aspect-[4/5] w-full object-cover object-top"
+                loading="eager"
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div class="hidden lg:col-start-3 lg:row-start-1 lg:block" data-reveal style="--reveal-delay: 320ms">
           <div class="relative mx-auto aspect-square w-full max-w-sm" aria-hidden="true">
             <div class="absolute inset-0 rotate-6 rounded-xl bg-accent-2-soft" />
             <div class="absolute inset-0 -rotate-3 rounded-xl border border-border bg-[linear-gradient(135deg,var(--color-accent),var(--color-accent-2))] shadow-lift" />
@@ -83,9 +92,9 @@ const social = [
               <span class="font-display text-6xl font-semibold tracking-tight text-accent-fg xl:text-7xl">{profile.initials}</span>
             </div>
           </div>
-        )
-      }
-    </div>
+        </div>
+      )
+    }
   </div>
 
   <a

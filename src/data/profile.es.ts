@@ -1,4 +1,5 @@
 import type { Profile } from './profile';
+import photo from '../assets/profile/homero.png';
 
 const profile: Profile = {
   name: 'Homero Barragán',
@@ -8,6 +9,7 @@ const profile: Profile = {
   tagline:
     'Ingeniero de software en transición hacia Data Science e IA aplicada. Construyo soluciones prácticas que convierten datos en ideas útiles.',
   location: 'Riobamba, Ecuador',
+  photo: { src: photo, alt: 'Retrato de Homero Barragán' },
   about: [
     'Soy ingeniero de software y estudiante de maestría en Inteligencia Artificial Aplicada. Estoy dando el salto hacia Data Science e ingeniería de IA.',
     'Desarrollo apps móviles con React Native y TypeScript, y construí una aplicación de apoyo a la toma de decisiones con Python, analítica y aprendizaje no supervisado. Presenté esa investigación en una conferencia internacional. Me mueve crear IA útil que convierta datos en información accionable.',

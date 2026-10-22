@@ -1,4 +1,5 @@
 import type { Profile } from './profile';
+import photo from '../assets/profile/homero.png';
 
 const profile: Profile = {
   name: 'Homero Barragán',
@@ -8,6 +9,7 @@ const profile: Profile = {
   tagline:
     'Software engineer moving into Data Science and applied AI. I build practical solutions that turn data into useful insights.',
   location: 'Riobamba, Ecuador',
+  photo: { src: photo, alt: 'Portrait of Homero Barragán' },
   about: [
     "I'm a software engineer and Master's student in Applied Artificial Intelligence, moving toward Data Science and AI engineering.",
     'I build mobile apps with React Native and TypeScript, and I developed a decision-support application using Python, analytics and unsupervised learning. I presented that research at an international conference. I like building practical AI that turns data into actionable insight.',
