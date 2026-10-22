@@ -23,9 +23,13 @@ const social = [
 
 <section class="glow relative" aria-labelledby="hero-title">
   <div class="container-page grid min-h-[calc(100svh-4rem)] grid-cols-12 items-center gap-y-8 md:gap-x-8 pt-16 pb-20">
-    <div class="col-span-12 lg:col-span-8">
+    <div class="hidden lg:col-span-3 lg:block" data-reveal style="--reveal-delay: 240ms">
+      <CodingScene lang={lang} initials={profile.initials} />
+    </div>
+
+    <div class="col-span-12 lg:col-span-6">
       <p class="eyebrow" data-reveal>{t('hero.greeting')}</p>
-      <h1 id="hero-title" class="mt-4 text-4xl font-semibold md:text-7xl" data-reveal style="--reveal-delay: 80ms">
+      <h1 id="hero-title" class="mt-4 text-4xl font-semibold md:text-7xl lg:text-6xl xl:text-7xl" data-reveal style="--reveal-delay: 80ms">
         {profile.name}
         <span class="mt-1 block text-gradient pb-1">{profile.headline}</span>
       </h1>
@@ -60,7 +64,7 @@ const social = [
       </div>
     </div>
 
-    <div class="hidden lg:col-span-4 lg:block" data-reveal style="--reveal-delay: 240ms">
+    <div class="hidden lg:col-span-3 lg:block" data-reveal style="--reveal-delay: 320ms">
       {
         profile.photo ? (
           <Image
@@ -72,7 +76,13 @@ const social = [
             loading="eager"
           />
         ) : (
-          <CodingScene lang={lang} initials={profile.initials} />
+          <div class="relative mx-auto aspect-square w-full max-w-sm" aria-hidden="true">
+            <div class="absolute inset-0 rotate-6 rounded-xl bg-accent-2-soft" />
+            <div class="absolute inset-0 -rotate-3 rounded-xl border border-border bg-[linear-gradient(135deg,var(--color-accent),var(--color-accent-2))] shadow-lift" />
+            <div class="absolute inset-0 grid place-items-center">
+              <span class="font-display text-6xl font-semibold tracking-tight text-accent-fg xl:text-7xl">{profile.initials}</span>
+            </div>
+          </div>
         )
       }
     </div>
