@@ -4,8 +4,10 @@ import { Materials, themes } from './palette';
 
 /** Target internal resolution (scene pixels across the canvas). */
 const TARGET_PIXELS = 190;
-/** Half the visible height of the orthographic camera, in world units. */
-const VIEW = 1.8;
+/** Max pointer-follow rotation of the diorama (radians). */
+const MAX_YAW = 0.22;
+/** Room bounds (floor slab + walls), used to frame the whole room. */
+const ROOM = { min: new THREE.Vector3(-1.9, -0.16, -1.9), max: new THREE.Vector3(1.9, 2.5, 1.9) };
 /** Character poses advance in steps, like hand-drawn sprite frames. */
 const POSE_FPS = 12;
 const RENDER_FPS = 30;
@@ -89,6 +91,30 @@ function bump(t: number, start: number, length: number) {
 }
 
 /**
+ * Fits the orthographic frustum (square) around the whole room, for every pointer rotation.
+ * Returns its half size in world units.
+ */
+function frameRoom(camera: THREE.OrthographicCamera) {
+  camera.updateMatrixWorld();
+  const view = new THREE.Box2(new THREE.Vector2(Infinity, Infinity), new THREE.Vector2(-Infinity, -Infinity));
+  const corner = new THREE.Vector3();
+  for (const yaw of [-MAX_YAW, 0, MAX_YAW]) {
+    for (let i = 0; i < 8; i++) {
+      corner
+        .set(i & 1 ? ROOM.max.x : ROOM.min.x, i & 2 ? ROOM.max.y : ROOM.min.y, i & 4 ? ROOM.max.z : ROOM.min.z)
+        .applyAxisAngle(THREE.Object3D.DEFAULT_UP, yaw)
+        .applyMatrix4(camera.matrixWorldInverse);
+      view.expandByPoint(new THREE.Vector2(corner.x, corner.y));
+    }
+  }
+  const center = view.getCenter(new THREE.Vector2());
+  const half = (Math.max(view.max.x - view.min.x, view.max.y - view.min.y) / 2) * 1.02;
+  Object.assign(camera, { left: center.x - half, right: center.x + half, top: center.y + half, bottom: center.y - half });
+  camera.updateProjectionMatrix();
+  return half;
+}
+
+/**
  * Mounts the pixel-art scene inside `container`. Returns false if WebGL is not available.
  */
 export function mount(container: HTMLElement): boolean {
@@ -118,8 +144,8 @@ export function mount(container: HTMLElement): boolean {
   scene.add(world.root);
 
   // Diagonal (isometric-like) view.
-  const camera = new THREE.OrthographicCamera(-VIEW, VIEW, VIEW, -VIEW, 0.1, 60);
-  const target = new THREE.Vector3(0, 1.05, -0.35);
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 60);
+  const target = new THREE.Vector3(0, 1.05, 0);
   const azimuth = 0.62;
   const elevation = 0.55;
   camera.position
@@ -127,6 +153,7 @@ export function mount(container: HTMLElement): boolean {
     .multiplyScalar(20)
     .add(target);
   camera.lookAt(target);
+  const view = frameRoom(camera);
 
   // Lights: sky fill, window light with crisp shadows, and the laptop glow on his face.
   const hemi = new THREE.HemisphereLight();
@@ -172,7 +199,7 @@ export function mount(container: HTMLElement): boolean {
     renderer.setSize(pixels, pixels, false);
     canvas.style.width = canvas.style.height = `${pixels * scale}px`;
     // One bitmap pixel = one screen pixel of the scene.
-    const unit = (2 * VIEW) / pixels;
+    const unit = (2 * view) / pixels;
     for (const s of sprites) {
       const [w, h] = s.userData.size as [number, number];
       s.scale.set(w * unit, h * unit, 1);
@@ -196,7 +223,7 @@ export function mount(container: HTMLElement): boolean {
 
   canvas.addEventListener('pointermove', (event) => {
     const rect = canvas.getBoundingClientRect();
-    if (!reduceMotion) targetYaw = (((event.clientX - rect.left) / rect.width) * 2 - 1) * 0.22;
+    if (!reduceMotion) targetYaw = (((event.clientX - rect.left) / rect.width) * 2 - 1) * MAX_YAW;
     canvas.style.cursor = hitsCat(event) ? 'pointer' : '';
   });
   canvas.addEventListener('pointerleave', () => {
